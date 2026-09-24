@@ -427,3 +427,11 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Archivos subidos por usuarios
+wwwroot/uploads/*
+!wwwroot/uploads/.gitkeep
+
+# Secrets / configuración local
+appsettings.Development.json
+appsettings.*.local.json
