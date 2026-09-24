@@ -1,4 +1,4 @@
-# Laboratorio-II---Final
+# Laboratorio-II-KioscoElRepo
 Sistema POS para Kiosco 24hs
 
 ## Diagrama E-R
