@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="KioscoPOS.Api/KioscoPOS.Api.csproj" />
+  <Project Path="KioscoPOS.Web/KioscoPOS.Web.csproj" />
+</Solution>
