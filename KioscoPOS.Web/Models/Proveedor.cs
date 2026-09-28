@@ -7,7 +7,7 @@ public class Proveedor
   public int Id { get; set; }
   [Required(ErrorMessage = "El nombre es obligatorio")]
   [StringLength(120)]
-  public string Nombre { get; set; } = null;
+  public string Nombre { get; set; } = null!;
 
   [StringLength(120)]
   public string? Contacto { get; set; }

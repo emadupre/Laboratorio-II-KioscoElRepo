@@ -8,7 +8,7 @@ public class Categoria
 
   [Required(ErrorMessage = "El nombre es obligatorio")]
   [StringLength(80, ErrorMessage = "Máximo 80 caracteres")]
-  public string Nombre { get; set; } = null;
+  public string Nombre { get; set; } = null!;
 
   public ICollection<Producto> Productos { get; set; } = new List<Producto>();
 }
