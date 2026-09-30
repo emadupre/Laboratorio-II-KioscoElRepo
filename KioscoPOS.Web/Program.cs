@@ -1,10 +1,19 @@
+using KioscoPOS.Web.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//base de datos
+var cs = builder.Configuration.GetConnectionString("DefaultConnection")!;
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(cs, ServerVersion.AutoDetect(cs)));
+
+// mvc
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+
+//pipeline
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
