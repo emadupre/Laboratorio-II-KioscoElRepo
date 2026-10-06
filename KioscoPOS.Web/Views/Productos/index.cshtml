@@ -1,0 +1,77 @@
+@model PagedResult<Producto>
+@{
+    ViewData["Title"] = "Productos";
+    var esAdmin = User.IsInRole("Administrador");
+}
+
+<h2>Productos</h2>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+@if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
+
+<form method="get" class="d-flex gap-2 mb-3">
+    <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre" />
+    <select name="estado" class="form-select" style="max-width:180px">
+        <option value="" selected="@(ViewBag.Estado == null)">Todos</option>
+        <option value="bajo" selected="@(ViewBag.Estado == "bajo")">Stock bajo</option>
+        <option value="sin" selected="@(ViewBag.Estado == "sin")">Sin stock</option>
+    </select>
+    <button class="btn btn-secondary">Buscar</button>
+    @if (esAdmin) { <a asp-action="Create" class="btn btn-primary">Nuevo</a> }
+</form>
+
+<table class="table align-middle">
+    <thead>
+        <tr>
+            <th></th><th>Nombre</th><th>Categoría</th>
+            @if (esAdmin) { <th>Costo</th> }
+            <th>Venta</th><th>Stock</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var p in Model.Items)
+    {
+        <tr>
+            <td>
+                @if (!string.IsNullOrEmpty(p.ImagenPath))
+                {
+                    <img src="@p.ImagenPath" style="width:40px;height:40px;object-fit:cover" class="rounded" />
+                }
+            </td>
+            <td>@p.Nombre</td>
+            <td>@p.Categoria?.Nombre</td>
+            @if (esAdmin) { <td>@p.PrecioCosto.ToString("C")</td> }
+            <td>@p.PrecioVenta.ToString("C")</td>
+            <td>
+                @p.StockActual
+                @if (p.StockActual <= p.StockMinimo)
+                {
+                    <span class="badge bg-danger">Stock bajo</span>
+                }
+            </td>
+            <td class="text-end">
+                @if (esAdmin)
+                {
+                    <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                    <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('¿Eliminar el producto?');">
+                        <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Page ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i"
+                   asp-route-buscar="@ViewBag.Buscar" asp-route-estado="@ViewBag.Estado">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

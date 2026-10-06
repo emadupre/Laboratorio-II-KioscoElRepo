@@ -15,9 +15,6 @@ public class Producto
   [StringLength(120)]
   public string Nombre { get; set; } = null!;
 
-  [StringLength(50)]
-  public string? CodigoBarras { get; set; }
-
   [Column(TypeName = "decimal(18,2)")]
   [Range(0, 9999999, ErrorMessage = "El precio debe ser mayor o igual a 0")]
   public decimal PrecioCosto { get; set; }

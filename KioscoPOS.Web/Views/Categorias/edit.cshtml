@@ -1,0 +1,8 @@
+@model Categoria
+@{ ViewData["Title"] = "Editar categoría"; }
+
+<h2>Editar categoría</h2>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_Form" model="Model" />
+</form>

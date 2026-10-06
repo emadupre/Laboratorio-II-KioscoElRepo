@@ -1,0 +1,7 @@
+@model Categoria
+@{ ViewData["Title"] = "Nueva categoría"; }
+
+<h2>Nueva categoría</h2>
+<form asp-action="Create" method="post">
+    <partial name="_Form" model="Model" />
+</form>

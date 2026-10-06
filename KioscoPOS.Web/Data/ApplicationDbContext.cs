@@ -33,14 +33,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     .HasForeignKey(p => p.CategoriaId)
     .OnDelete(DeleteBehavior.Restrict);
 
-    //indice unico en el codigo de barras, 
-    // en el mysql permite los multiples null en un indice unique, 
-    // así que los prod sin cod no chocan entre sí.
-
-    b.Entity<Producto>()
-    .HasIndex(p => p.CodigoBarras)
-    .IsUnique();
-
     //token
     b.Entity<Producto>()
     .Property(p => p.RowVersion)

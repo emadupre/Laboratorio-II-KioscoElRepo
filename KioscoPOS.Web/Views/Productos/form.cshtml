@@ -1,0 +1,82 @@
+@model ProductoViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="mb-3">
+    <label asp-for="Nombre" class="form-label"></label>
+    <input asp-for="Nombre" class="form-control" />
+    <span asp-validation-for="Nombre" class="text-danger"></span>
+</div>
+
+<div class="mb-3 position-relative">
+    <label asp-for="CategoriaId" class="form-label"></label>
+    <input type="hidden" asp-for="CategoriaId" id="CategoriaId" />
+    <input type="text" id="categoriaBuscar" class="form-control" autocomplete="off"
+           placeholder="Escribí para buscar..." value="@Model.CategoriaNombre" />
+    <ul id="categoriaResultados" class="list-group position-absolute w-100" style="z-index:10"></ul>
+    <span asp-validation-for="CategoriaId" class="text-danger"></span>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label asp-for="PrecioCosto" class="form-label"></label>
+        <input asp-for="PrecioCosto" class="form-control" />
+        <span asp-validation-for="PrecioCosto" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="PrecioVenta" class="form-label"></label>
+        <input asp-for="PrecioVenta" class="form-control" />
+        <span asp-validation-for="PrecioVenta" class="text-danger"></span>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label asp-for="StockMinimo" class="form-label"></label>
+        <input asp-for="StockMinimo" class="form-control" />
+        <span asp-validation-for="StockMinimo" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label asp-for="ImagenArchivo" class="form-label"></label>
+    @if (!string.IsNullOrEmpty(Model.ImagenPath))
+    {
+        <div class="mb-2"><img src="@Model.ImagenPath" style="max-height:100px" class="rounded" /></div>
+    }
+    <input asp-for="ImagenArchivo" type="file" class="form-control" accept=".jpg,.jpeg,.png" />
+    <span asp-validation-for="ImagenArchivo" class="text-danger"></span>
+</div>
+
+<button class="btn btn-primary">Guardar</button>
+<a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+
+<script>
+    const input = document.getElementById('categoriaBuscar');
+    const lista = document.getElementById('categoriaResultados');
+    const hidden = document.getElementById('CategoriaId');
+    let timer;
+
+    input.addEventListener('input', () => {
+        hidden.value = '';              // obliga a elegir de la lista
+        clearTimeout(timer);
+        timer = setTimeout(async () => {
+            const resp = await fetch('/Categorias/Buscar?term=' + encodeURIComponent(input.value));
+            const items = await resp.json();
+            lista.innerHTML = '';
+            items.forEach(c => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item list-group-item-action';
+                li.style.cursor = 'pointer';
+                li.textContent = c.nombre;
+                li.onclick = () => {
+                    input.value = c.nombre;
+                    hidden.value = c.id;
+                    lista.innerHTML = '';
+                };
+                lista.appendChild(li);
+            });
+        }, 300);
+    });
+
+    document.addEventListener('click', e => {
+        if (e.target !== input) lista.innerHTML = '';
+    });
+</script>

@@ -1,0 +1,10 @@
+@model ProductoViewModel
+@{ ViewData["Title"] = "Editar producto"; }
+
+<h2>Editar producto</h2>
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <partial name="_Form" model="Model" />
+</form>
+
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -1,0 +1,48 @@
+@model PagedResult<Proveedor>
+@{ ViewData["Title"] = "Proveedores"; }
+
+<h2>Proveedores</h2>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+@if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
+
+<form method="get" class="d-flex gap-2 mb-3">
+    <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre o CUIT" />
+    <button class="btn btn-secondary">Buscar</button>
+    <a asp-action="Create" class="btn btn-primary">Nuevo</a>
+</form>
+
+<table class="table">
+    <thead><tr><th>Nombre</th><th>CUIT</th><th>Contacto</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var p in Model.Items)
+    {
+        <tr>
+            <td>@p.Nombre</td>
+            <td>@p.CUIT</td>
+            <td>@p.Contacto</td>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-outline-primary">Editar</a>
+                @if (User.IsInRole("Administrador"))
+                {
+                    <form asp-action="Delete" asp-route-id="@p.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('¿Eliminar el proveedor?');">
+                        <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Page ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i" asp-route-buscar="@ViewBag.Buscar">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
