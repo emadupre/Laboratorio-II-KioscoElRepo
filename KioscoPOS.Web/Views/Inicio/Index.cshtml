@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Kiosco 24hs</h1>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <p class="lead">Bienvenido, @User.Identity.Name.</p>
+        <p>Usá el navbar para navegar.</p>
+    }
+    else
+    {
+        <p class="lead">Sistema de punto de venta.</p>
+        <a asp-controller="Cuenta" asp-action="IniciarSesion" class="btn btn-primary">Iniciar sesion</a>
+    }
+</div>

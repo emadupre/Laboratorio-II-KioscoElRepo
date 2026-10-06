@@ -4,7 +4,7 @@ using KioscoPOS.Web.Models;
 
 namespace KioscoPOS.Web.Controllers;
 
-public class HomeController : Controller
+public class InicioController : Controller
 {
     public IActionResult Index()
     {
