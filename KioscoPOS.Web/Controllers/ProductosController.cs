@@ -68,9 +68,10 @@ public async Task<IActionResult> Create(ProductoViewModel vm)
             Nombre = vm.Nombre,
             PrecioCosto = vm.PrecioCosto,
             PrecioVenta = vm.PrecioVenta,
+            StockActual = vm.StockActual,
             StockMinimo = vm.StockMinimo,
             CategoriaId = vm.CategoriaId,
-            StockActual = 0,
+            
             ImagenPath = await GuardarImagenAsync(vm.ImagenArchivo)
         };
         _context.Add(producto);

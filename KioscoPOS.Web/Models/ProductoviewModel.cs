@@ -16,6 +16,9 @@ public class ProductoViewModel
 
     [Range(0, int.MaxValue, ErrorMessage = "Valor inválido")]
     [Display(Name = "Stock mínimo")]
+
+      public int StockActual { get; set; }
+      
     public int StockMinimo { get; set; }
 
     [Range(1, int.MaxValue, ErrorMessage = "Seleccioná una categoría")]
