@@ -1,0 +1,97 @@
+@using KioscoPOS.Web.Models.Enums
+@model PagedResult<MovimientoStock>
+@{
+    ViewData["Title"] = "Historial de stock";
+    var esAdmin = User.IsInRole("Administrador");
+}
+
+<h2>Historial de stock</h2>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3 position-relative">
+        <input type="hidden" name="productoId" id="productoId" value="@ViewBag.ProductoId" />
+        <input type="text" id="productoBuscar" class="form-control" autocomplete="off"
+               placeholder="Producto (escribí para buscar)" value="@ViewBag.ProductoNombre" />
+        <ul id="productoResultados" class="list-group position-absolute w-100" style="z-index:10"></ul>
+    </div>
+    <div class="col-md-2">
+        <select name="tipo" class="form-select">
+            <option value="">Todos los tipos</option>
+            @foreach (var t in Enum.GetValues<TipoMovimientoStock>())
+            {
+                <option value="@t" selected="@(ViewBag.Tipo == t)">@t</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2"><input type="date" name="desde" value="@ViewBag.Desde" class="form-control" /></div>
+    <div class="col-md-2"><input type="date" name="hasta" value="@ViewBag.Hasta" class="form-control" /></div>
+    <div class="col-md-3 d-flex gap-2">
+        <button class="btn btn-secondary">Filtrar</button>
+        <a asp-action="Historial" class="btn btn-outline-secondary">Limpiar</a>
+        @if (esAdmin) { <a asp-action="Ajuste" class="btn btn-primary">Ajuste</a> }
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Cantidad</th><th>Stock resultante</th><th>Motivo</th><th>Usuario</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var m in Model.Items)
+    {
+        <tr>
+            <td>@m.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@m.Producto.Nombre</td>
+            <td>@m.Tipo</td>
+            <td class="@(m.Cantidad > 0 ? "text-success" : "text-danger")">@(m.Cantidad > 0 ? "+" : "")@m.Cantidad</td>
+            <td>@m.StockResultante</td>
+            <td>@m.Motivo</td>
+            <td>@m.Usuario.Email</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Page ? "active" : "")">
+                <a class="page-link" asp-action="Historial" asp-route-page="@i"
+                   asp-route-productoId="@ViewBag.ProductoId" asp-route-tipo="@ViewBag.Tipo"
+                   asp-route-desde="@ViewBag.Desde" asp-route-hasta="@ViewBag.Hasta">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+@section Scripts {
+    <script>
+        const input = document.getElementById('productoBuscar');
+        const lista = document.getElementById('productoResultados');
+        const hidden = document.getElementById('productoId');
+        let timer;
+
+        input.addEventListener('input', () => {
+            hidden.value = '';
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                const resp = await fetch('/Productos/Buscar?term=' + encodeURIComponent(input.value));
+                const items = await resp.json();
+                lista.innerHTML = '';
+                items.forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item list-group-item-action';
+                    li.style.cursor = 'pointer';
+                    li.textContent = p.nombre;
+                    li.onclick = () => { input.value = p.nombre; hidden.value = p.id; lista.innerHTML = ''; };
+                    lista.appendChild(li);
+                });
+            }, 300);
+        });
+
+        document.addEventListener('click', e => { if (e.target !== input) lista.innerHTML = ''; });
+    </script>
+}

@@ -3,6 +3,7 @@ using KioscoPOS.Web.Data.Seed;
 using KioscoPOS.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using KioscoPOS.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // mvc
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IStockService, StockService>();
 
 var app = builder.Build();
 

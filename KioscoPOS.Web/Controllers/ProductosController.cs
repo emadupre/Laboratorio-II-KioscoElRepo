@@ -202,4 +202,21 @@ public async Task<IActionResult> Edit(int id)
         var fisico = Path.Combine(_env.WebRootPath, path.TrimStart('/'));
         if (System.IO.File.Exists(fisico)) System.IO.File.Delete(fisico);
     }
+
+    [HttpGet]
+public async Task<IActionResult> Buscar(string? term)
+{
+    var query = _context.Productos.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(term))
+        query = query.Where(p => p.Nombre.Contains(term));
+
+    var items = await query
+        .OrderBy(p => p.Nombre)
+        .Take(10)
+        .Select(p => new { id = p.Id, nombre = p.Nombre, stock = p.StockActual })
+        .ToListAsync();
+
+    return Json(items);
+}
 }

@@ -1,0 +1,80 @@
+@using KioscoPOS.Web.ViewModels
+@model AjusteStockVM
+@{ ViewData["Title"] = "Ajuste de stock"; }
+
+<h2>Ajuste manual de stock</h2>
+
+<form asp-action="Ajuste" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3 position-relative">
+        <label class="form-label">Producto</label>
+        <input type="hidden" asp-for="ProductoId" id="ProductoId" />
+        <input type="text" id="productoBuscar" class="form-control" autocomplete="off"
+               placeholder="Escribí para buscar..." value="@Model.ProductoNombre" />
+        <ul id="productoResultados" class="list-group position-absolute w-100" style="z-index:10"></ul>
+        <span asp-validation-for="ProductoId" class="text-danger"></span>
+        <div id="stockInfo" class="form-text"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="Operacion" class="form-label">Operación</label>
+            <select asp-for="Operacion" class="form-select">
+                <option value="aumentar">Aumentar stock</option>
+                <option value="disminuir">Disminuir stock</option>
+            </select>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="Cantidad" class="form-label"></label>
+            <input asp-for="Cantidad" class="form-control" />
+            <span asp-validation-for="Cantidad" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Motivo" class="form-label"></label>
+        <input asp-for="Motivo" class="form-control" placeholder="Rotura, pérdida, recuento..." />
+        <span asp-validation-for="Motivo" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Registrar ajuste</button>
+    <a asp-action="Historial" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const input = document.getElementById('productoBuscar');
+        const lista = document.getElementById('productoResultados');
+        const hidden = document.getElementById('ProductoId');
+        const info = document.getElementById('stockInfo');
+        let timer;
+
+        input.addEventListener('input', () => {
+            hidden.value = '';
+            info.textContent = '';
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                const resp = await fetch('/Productos/Buscar?term=' + encodeURIComponent(input.value));
+                const items = await resp.json();
+                lista.innerHTML = '';
+                items.forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item list-group-item-action';
+                    li.style.cursor = 'pointer';
+                    li.textContent = p.nombre + ' (stock: ' + p.stock + ')';
+                    li.onclick = () => {
+                        input.value = p.nombre;
+                        hidden.value = p.id;
+                        info.textContent = 'Stock actual: ' + p.stock;
+                        lista.innerHTML = '';
+                    };
+                    lista.appendChild(li);
+                });
+            }, 300);
+        });
+
+        document.addEventListener('click', e => { if (e.target !== input) lista.innerHTML = ''; });
+    </script>
+}
