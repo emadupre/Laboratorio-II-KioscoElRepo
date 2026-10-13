@@ -11,6 +11,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
   }
   public DbSet<Categoria> Categorias => Set<Categoria>();
+  public DbSet<Marca> Marcas => Set<Marca>();
   public DbSet<Producto> Productos => Set<Producto>();
   public DbSet<Proveedor> Proveedores => Set<Proveedor>();
   public DbSet<Compra> Compras => Set<Compra>();
@@ -31,6 +32,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     .HasOne(p => p.Categoria)
     .WithMany(c => c.Productos)
     .HasForeignKey(p => p.CategoriaId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+    //Marca
+    b.Entity<Producto>()
+    .HasOne(p => p.Marca)
+    .WithMany(m => m.Productos)
+    .HasForeignKey(p => p.MarcaId)
     .OnDelete(DeleteBehavior.Restrict);
 
     //token

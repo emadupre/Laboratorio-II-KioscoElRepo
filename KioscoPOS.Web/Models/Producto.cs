@@ -10,6 +10,12 @@ public class Producto
   public int CategoriaId { get; set; } // el FK a Categoria
   public Categoria Categoria { get; set; } = null!;
 
+  public int MarcaId { get; set; } // el FK a marca
+  public Marca Marca { get; set; } = null!;
+
+  [StringLength(50)]
+  public string? CodigoBarras { get; set; }
+
 
   [Required(ErrorMessage = "El nombre es obligatorio")]
   [StringLength(120)]
