@@ -131,7 +131,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Cajas", (string)null);
+                    b.ToTable("Cajas");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Categoria", b =>
@@ -149,7 +149,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorias", (string)null);
+                    b.ToTable("Categorias");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Compra", b =>
@@ -182,7 +182,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Compras", (string)null);
+                    b.ToTable("Compras");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.DetalleCompra", b =>
@@ -211,7 +211,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("DetalleCompras", (string)null);
+                    b.ToTable("DetalleCompras");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.DetalleVenta", b =>
@@ -240,7 +240,25 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("VentaId");
 
-                    b.ToTable("DetalleVentas", (string)null);
+                    b.ToTable("DetalleVentas");
+                });
+
+            modelBuilder.Entity("KioscoPOS.Web.Models.Marca", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marcas");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.MovimientoCaja", b =>
@@ -277,7 +295,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("MovimientosCaja", (string)null);
+                    b.ToTable("MovimientosCaja");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.MovimientoStock", b =>
@@ -323,7 +341,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("MovimientosStock", (string)null);
+                    b.ToTable("MovimientosStock");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Producto", b =>
@@ -344,6 +362,9 @@ namespace KioscoPOS.Web.Migrations
                     b.Property<string>("ImagenPath")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
+
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -371,10 +392,9 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.HasIndex("CodigoBarras")
-                        .IsUnique();
+                    b.HasIndex("MarcaId");
 
-                    b.ToTable("Productos", null, t =>
+                    b.ToTable("Productos", t =>
                         {
                             t.HasCheckConstraint("CK_Producto_StockNoNegativo", "`StockActual` >= 0");
                         });
@@ -403,7 +423,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Proveedores", (string)null);
+                    b.ToTable("Proveedores");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Venta", b =>
@@ -451,7 +471,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Ventas", (string)null);
+                    b.ToTable("Ventas");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -700,7 +720,15 @@ namespace KioscoPOS.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("KioscoPOS.Web.Models.Marca", "Marca")
+                        .WithMany("Productos")
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Categoria");
+
+                    b.Navigation("Marca");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Venta", b =>
@@ -801,6 +829,11 @@ namespace KioscoPOS.Web.Migrations
             modelBuilder.Entity("KioscoPOS.Web.Models.Compra", b =>
                 {
                     b.Navigation("Detalles");
+                });
+
+            modelBuilder.Entity("KioscoPOS.Web.Models.Marca", b =>
+                {
+                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Producto", b =>
