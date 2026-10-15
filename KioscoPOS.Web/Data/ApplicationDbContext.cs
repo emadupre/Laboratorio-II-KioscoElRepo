@@ -133,7 +133,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     b.Entity<MovimientoStock>()
     .HasOne(m => m.Producto)
-    .WithMany(p => p.Movientos)
+    .WithMany(p => p.Movimientos)
     .HasForeignKey(m => m.ProductoId)
     .OnDelete(DeleteBehavior.Restrict);
 

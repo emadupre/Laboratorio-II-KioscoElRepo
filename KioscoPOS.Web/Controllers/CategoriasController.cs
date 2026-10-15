@@ -18,40 +18,40 @@ public class CategoriasController : Controller
     {
         page = Math.Max(page, 1);
         var query = _context.Categorias.AsQueryable();
-    if (!string.IsNullOrWhiteSpace(buscar))
-    query = query.Where(c => c.Nombre.Contains(buscar));
+        if (!string.IsNullOrWhiteSpace(buscar))
+            query = query.Where(c => c.Nombre.Contains(buscar));
 
-    var total = await query.CountAsync();
-    page = Math.Min(page, Math.Max(1, (int)Math.Ceiling(total / (double)PageSize)));
+        var total = await query.CountAsync();
+        page = Math.Min(page, Math.Max(1, (int)Math.Ceiling(total / (double)PageSize)));
 
-    var items = await query
-    .OrderBy(c => c.Nombre)
-    .Skip((page-1)* PageSize)
-    .Take(PageSize)
-    .ToListAsync();
+        var items = await query
+        .OrderBy(c => c.Nombre)
+        .Skip((page - 1) * PageSize)
+        .Take(PageSize)
+        .ToListAsync();
 
-    ViewBag.Buscar = buscar;
-    return View(new PagedResult<Categoria>
-    {
-        Items = items,
-        Page = page,
-        PageSize = PageSize,
-        TotalItems = total
-    });
+        ViewBag.Buscar = buscar;
+        return View(new PagedResult<Categoria>
+        {
+            Items = items,
+            Page = page,
+            PageSize = PageSize,
+            TotalItems = total
+        });
     }
 
-// alta
+    // alta
 
-public IActionResult Create() => View(new Categoria());
+    public IActionResult Create() => View(new Categoria());
 
-[HttpPost , ValidateAntiForgeryToken]
-public async Task<IActionResult> Create(Categoria categoria)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Categoria categoria)
     {
-        if(await _context.Categorias.AnyAsync(c => c.Nombre == categoria.Nombre))
-        ModelState.AddModelError("Nombre", "Ya Existe una categoria con este nombre ");
+        if (await _context.Categorias.AnyAsync(c => c.Nombre == categoria.Nombre))
+            ModelState.AddModelError("Nombre", "Ya Existe una categoria con este nombre ");
 
-        if(!ModelState.IsValid)
-        return View(categoria);
+        if (!ModelState.IsValid)
+            return View(categoria);
 
         _context.Add(new Categoria { Nombre = categoria.Nombre });
         await _context.SaveChangesAsync();
@@ -59,24 +59,24 @@ public async Task<IActionResult> Create(Categoria categoria)
         return RedirectToAction(nameof(Index));
     }
 
-// modificar
-public async Task<IActionResult> Edit(int Id)
+    // modificar
+    public async Task<IActionResult> Edit(int Id)
     {
         var categoria = await _context.Categorias.FindAsync(Id);
         if (categoria == null) return NotFound();
         return View(categoria);
     }
 
-    [HttpPost , ValidateAntiForgeryToken]
-    public async Task<IActionResult>Edit(int id , Categoria categoria)
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Categoria categoria)
     {
-        if(id !=categoria.Id) return BadRequest();
+        if (id != categoria.Id) return BadRequest();
 
-        if(await _context.Categorias.AnyAsync(c => c.Nombre == categoria.Nombre && c.Id != id))
+        if (await _context.Categorias.AnyAsync(c => c.Nombre == categoria.Nombre && c.Id != id))
             ModelState.AddModelError(nameof(Categoria.Nombre), "Ya existe una categoría con ese nombre.");
 
-        if(!ModelState.IsValid)
-        return View(categoria);
+        if (!ModelState.IsValid)
+            return View(categoria);
 
         var categoriaExistente = await _context.Categorias.FindAsync(id);
         if (categoriaExistente == null) return NotFound();
@@ -86,15 +86,15 @@ public async Task<IActionResult> Edit(int Id)
         return RedirectToAction(nameof(Index));
     }
 
-//baja, solo para los administradores
-[HttpPost,ValidateAntiForgeryToken]
-[Authorize(Roles = "Administrador")]
-public async Task<IActionResult>Delete(int id)
+    //baja, solo para los administradores
+    [HttpPost, ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
+    public async Task<IActionResult> Delete(int id)
     {
         var categoria = await _context.Categorias.FindAsync(id);
-        if(categoria == null) return NotFound();
+        if (categoria == null) return NotFound();
 
-        if ( await _context.Productos.AnyAsync(p => p.CategoriaId == id))
+        if (await _context.Productos.AnyAsync(p => p.CategoriaId == id))
         {
             TempData["Error"] = "No se puede eliminar la categoría: tiene productos asociados.";
             return RedirectToAction(nameof(Index));
@@ -109,19 +109,103 @@ public async Task<IActionResult>Delete(int id)
     //busqueda de categoria
 
     [HttpGet]
-public async Task<IActionResult> Buscar(string? term)
-{
-    var query = _context.Categorias.AsQueryable();
+    public async Task<IActionResult> Buscar(string? term)
+    {
+        var query = _context.Categorias.AsQueryable();
 
-    if (!string.IsNullOrWhiteSpace(term))
-        query = query.Where(c => c.Nombre.Contains(term));
+        if (!string.IsNullOrWhiteSpace(term))
+            query = query.Where(c => c.Nombre.Contains(term));
 
-    var items = await query
+        var items = await query
+            .OrderBy(c => c.Nombre)
+            .Take(10)
+            .Select(c => new { id = c.Id, nombre = c.Nombre })
+            .ToListAsync();
+
+        return Json(items);
+    }
+
+    public IActionResult Gestion() => View();
+
+    [HttpGet]
+    public async Task<IActionResult> ListarJson(string? buscar, int page = 1, int pageSize = 10)
+    {
+        page = Math.Max(1, page);
+        pageSize = Math.Clamp(pageSize, 1, 50);
+
+        var query = _context.Categorias.AsNoTracking().AsQueryable();
+        if (!string.IsNullOrWhiteSpace(buscar))
+            query = query.Where(c => c.Nombre.Contains(buscar));
+
+        var total = await query.CountAsync();
+        var items = await query
         .OrderBy(c => c.Nombre)
-        .Take(10)
-        .Select(c => new { id = c.Id, nombre = c.Nombre })
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(c => new { c.Id, c.Nombre })
         .ToListAsync();
 
-    return Json(items);
-}
+        return Json(new
+        {
+            items,
+            page,
+            pageSize,
+            totalItems = total,
+            totalPages = (int)Math.Ceiling(total / (double)pageSize)
+        });
+    }
+
+    public record CategoriaDto(int Id, string? Nombre);
+
+    [HttpPost]
+    public async Task<IActionResult> CrearJson([FromBody] CategoriaDto dto)
+    {
+        var nombre = dto?.Nombre?.Trim();
+        if (string.IsNullOrWhiteSpace(nombre))
+            return BadRequest(new { mensaje = "El nombre es obligatorio" });
+
+        if (await _context.Categorias.AnyAsync(c => c.Nombre == nombre))
+            return Conflict(new { mensaje = "Ya existe una categoria con ese nombre." });
+
+        var cat = new Categoria { Nombre = nombre };
+        _context.Add(cat);
+        await _context.SaveChangesAsync();
+        return Ok(new { cat.Id, cat.Nombre });
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> EditarJson(int id, [FromBody] CategoriaDto dto)
+    {
+        if (dto == null || id != dto.Id)
+            return BadRequest(new { mensaje = "Id no coincide" });
+
+        var nombre = dto.Nombre?.Trim();
+        if (string.IsNullOrWhiteSpace(nombre))
+            return BadRequest(new { mensaje = "El nombre es obligatorio" });
+
+        var cat = await _context.Categorias.FindAsync(id);
+        if (cat == null) return NotFound(new { mensaje = "Categoria no" });
+
+        if (await _context.Categorias.AnyAsync(c => c.Nombre == nombre && c.Id != id))
+            return Conflict(new { mensaje = "Ya existe una categoria con ese nombre" });
+
+        cat.Nombre = nombre;
+        await _context.SaveChangesAsync();
+        return Ok(new { cat.Id, cat.Nombre });
+    }
+
+    [HttpDelete]
+    [Authorize(Roles = "Administrador")]
+    public async Task<IActionResult> EliminarJson(int id)
+    {
+        var cat = await _context.Categorias.FindAsync(id);
+        if (cat == null) return NotFound(new { mensaje = "Categoría no encontrada" });
+
+        if (await _context.Productos.AnyAsync(p => p.CategoriaId == id))
+            return Conflict(new { mensaje = "No se puede eliminar: tiene productos asociados." });
+
+        _context.Categorias.Remove(cat);
+        await _context.SaveChangesAsync();
+        return Ok(new { mensaje = "Categoría eliminada" });
+    }
 }
