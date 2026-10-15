@@ -435,3 +435,10 @@ wwwroot/uploads/*
 # Secrets / configuración local
 appsettings.Development.json
 appsettings.*.local.json
+
+KioscoPOS.Web/Migrations/20261013204309_InitialCreate.Designer.cs
+KioscoPOS.Web/Migrations/20261013204309_InitialCreate.cs
+.gitignore
+KioscoPOS.Web/Migrations/20261013203825_InitialCreate.cs
+
+KioscoPOS.Web/Migrations/20261013203825_InitialCreate.Designer.cs
