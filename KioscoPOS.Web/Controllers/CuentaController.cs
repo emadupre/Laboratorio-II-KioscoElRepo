@@ -1,10 +1,8 @@
 using KioscoPOS.Web.Models;
 using KioscoPOS.Web.ViewModels;
-using KioscoPOS.Web.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace KioscoPOS.Web.Controllers;
 
@@ -109,7 +107,7 @@ public class CuentaController : Controller
     {
       var ext = Path.GetExtension(vm.AvatarArchivo.FileName).ToLowerInvariant();
       if (!ExtensionesPermitidas.Contains(ext))
-        ModelState.AddModelError("AvatarArchivo", "Formato no permetido (jpg, jpeg, png o webp)");
+        ModelState.AddModelError("AvatarArchivo", "Formato no permitido (jpg, jpeg, png o webp)");
       else if (vm.AvatarArchivo.Length > TamanoMaximoAvatar)
         ModelState.AddModelError("AvatarArchivo", "La imagen supera los 2MB");
     }
