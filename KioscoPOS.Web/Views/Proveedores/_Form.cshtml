@@ -4,19 +4,20 @@
 
 <div class="mb-3">
     <label asp-for="Nombre" class="form-label"></label>
-    <input asp-for="Nombre" class="form-control" />
+    <input asp-for="Nombre" class="form-control" placeholder="Ej Distribuidora JDS S.A" />
     <span asp-validation-for="Nombre" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
     <label asp-for="CUIT" class="form-label"></label>
-    <input asp-for="CUIT" class="form-control" placeholder="20-12345678-9" />
+    <input asp-for="CUIT" class="form-control" placeholder="20-12345678-9" inputmode="numeric" maxlength="13" />
+    <div class="form-text">Formato: XX-XXXXXXXX-X o sin guiones (11 digitos).</div>
     <span asp-validation-for="CUIT" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
     <label asp-for="Contacto" class="form-label"></label>
-    <input asp-for="Contacto" class="form-control" />
+    <input asp-for="Contacto" class="form-control" placeholder="+54 11 5555-5555" type="tel" maxlength="20"/>
     <span asp-validation-for="Contacto" class="text-danger"></span>
 </div>
 

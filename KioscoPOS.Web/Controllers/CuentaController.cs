@@ -56,7 +56,7 @@ public class CuentaController : Controller
   public async Task<IActionResult> CerrarSesion()
   {
     await _signInManager.SignOutAsync();
-    return RedirectToAction("Iniciar Sesion", "Cuenta");
+    return RedirectToAction("IniciarSesion", "Cuenta");
   }
 
   //acceso denegado

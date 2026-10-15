@@ -21,7 +21,7 @@
             <option value="">Todos los tipos</option>
             @foreach (var t in Enum.GetValues<TipoMovimientoStock>())
             {
-                <option value="@t" selected="@(ViewBag.Tipo == t)">@t</option>
+                <option value="@t" selected="@(ViewBag.Tipo?.ToString() == t.ToString() ?"selected": null)">@t</option>
             }
         </select>
     </div>

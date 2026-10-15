@@ -23,7 +23,7 @@ public class StockController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Historial(int? productoId, TipoMovimientoStock? tipo, DateTime? desde , DateTime hasta, int page = 1)
+    public async Task<IActionResult> Historial(int? productoId, TipoMovimientoStock? tipo, DateTime? desde , DateTime? hasta, int page = 1)
     {
         page = Math.Max(page,1);
         var query = _context.MovimientosStock
@@ -34,7 +34,7 @@ public class StockController : Controller
         if(productoId.HasValue) query = query.Where(m => m.ProductoId == productoId);
         if(tipo.HasValue) query = query.Where(m => m.Tipo == tipo);
         if(desde.HasValue)query = query.Where(m => m.Fecha >= desde.Value.Date);
-        if(hasta != default) query = query.Where(m => m.Fecha <= hasta.Date.AddDays(1).AddTicks(-1));
+        if(hasta.HasValue) query = query.Where(m => m.Fecha <= hasta.Value.AddDays(1).AddTicks(-1));
 
         var total = await query.CountAsync();
 
@@ -50,17 +50,17 @@ public class StockController : Controller
         .Select(p => p.Nombre)
         .FirstOrDefaultAsync();
 
-        ViewBag.productoId = productoId;
-        ViewBag.tipo = tipo;
-        ViewBag.desde = desde?.ToString("yyyy-MM-dd");
-        ViewBag.Hasta = hasta.ToString("yyyy-MM-dd");
+        ViewBag.ProductoId = productoId;
+        ViewBag.Tipo = tipo;
+        ViewBag.Desde = desde?.ToString("yyyy-MM-dd");
+        ViewBag.Hasta = hasta?.ToString("yyyy-MM-dd");
         return View(new PagedResult<MovimientoStock>
         {
             Items = items, Page = page, PageSize = PageSize, TotalItems = total
         });
     }
 
-    [Authorize(Roles.Administrador)]
+    [Authorize(Roles = Roles.Administrador)]
     public IActionResult Ajuste() => View (new AjusteStockVM());
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -87,6 +87,6 @@ public class StockController : Controller
             return View(VM);
         }
     TempData["ok"] = "Ajuste Registrado";
-    return RedirectToAction(nameof(Historial),new {productoID = VM.ProductoId});
+    return RedirectToAction(nameof(Historial),new {productoId = VM.ProductoId});
     }
 }

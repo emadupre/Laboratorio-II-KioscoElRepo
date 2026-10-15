@@ -12,9 +12,9 @@
 <form method="get" class="d-flex gap-2 mb-3">
     <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre" />
     <select name="estado" class="form-select" style="max-width:180px">
-        <option value="" selected="@(ViewBag.Estado == null)">Todos</option>
-        <option value="bajo" selected="@(ViewBag.Estado == "bajo")">Stock bajo</option>
-        <option value="sin" selected="@(ViewBag.Estado == "sin")">Sin stock</option>
+        <option value="" selected="@(ViewBag.Estado == null ? "selected" : null)">Todos</option>
+        <option value="bajo" selected="@(ViewBag.Estado == "bajo" ? "selected" : null)">Stock bajo</option>
+        <option value="sin" selected="@(ViewBag.Estado == "sin" ? "selected" : null)">Sin stock</option>
     </select>
     <button class="btn btn-secondary">Buscar</button>
     @if (esAdmin) { <a asp-action="Create" class="btn btn-primary">Nuevo</a> }
@@ -23,7 +23,7 @@
 <table class="table align-middle">
     <thead>
         <tr>
-            <th></th><th>Nombre</th><th>Categoría</th>
+            <th></th><th>Nombre</th><th>Categoría</th><th>Marca</th>
             @if (esAdmin) { <th>Costo</th> }
             <th>Venta</th><th>Stock</th><th></th>
         </tr>
@@ -40,6 +40,7 @@
             </td>
             <td>@p.Nombre</td>
             <td>@p.Categoria?.Nombre</td>
+            <td>@p.Marca?.Nombre</td>
             @if (esAdmin) { <td>@p.PrecioCosto.ToString("C")</td> }
             <td>@p.PrecioVenta.ToString("C")</td>
             <td>

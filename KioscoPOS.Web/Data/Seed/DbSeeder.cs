@@ -50,6 +50,24 @@ public static class DbSeeder
 
       await db.SaveChangesAsync();
     }
+
+    //marcas base
+    if (!await db.Marcas.AnyAsync())
+    {
+      db.Marcas.AddRange(
+      new() { Nombre = "Coca-Cola" },
+      new() { Nombre = "Pepsi" },
+      new() { Nombre = "Marlboro" },
+      new() { Nombre = "Philip Morris" },
+      new() { Nombre = "Arcor" },
+      new() { Nombre = "Bagley" },
+      new() { Nombre = "Marolio" },
+      new() { Nombre = "Matarazzo" },
+      new() { Nombre = "La Serenísima" },
+      new() { Nombre = "Sin marca" }
+      );
+      await db.SaveChangesAsync();
+    }
   }
 
   private static async Task CrearUsuarioAsync(

@@ -1,0 +1,78 @@
+@{
+  ViewData["Title"] = "Gestion de Marcas (Vue)";
+}
+
+<div id="app-marcas">
+  <h2>Gestión de Marcas <small class="text-muted fs-6">(SPA con Vue.js)</small></h2>
+
+  <div class="card mb-3 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">{{ editando ? 'Editar marca #' + form.id : 'Nueva marca' }}</h5>
+      <div class="row g-2 align-items-end">
+        <div class="col-md-6">
+          <label class="form-label">Nombre</label>
+          <input v-model="form.nombre" class="form-control" v-on:keyup.enter="guardar" />
+        </div>
+        <div class="col-md-6">
+          <button class="btn btn-primary" v-on:click="guardar" :disabled="cargando">
+            {{ editando ? 'Actualizar' : 'Crear' }}  
+          </button>
+          <button v-if="editando" class="btn btn-secondary" v-on:click="cancelarEdicion">Cancelar</button>
+        </div>
+      </div>
+      <div v-if="mensajeError" class="alert alert-danger mt-2 mb-0">{{ mensajeError }}</div>
+      <div v-if="mensajeOk" class="alert alert-success mt-2 mb-0">{{ mensajeOk }}</div>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mb-3">
+    <input v-model="buscar" v-on:keyup.enter="cargar(1)" class="form-control" placeholder="Buscar por nombre.." style="max-width:300px">
+    <button class="btn btn-secondary" v-on:click="cargar(1)">Buscar</button>
+    <span class="ms-auto align-self-center text-muted">Total: {{ totalItems }}</span>
+  </div>
+
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th style="width:80px">Id</th>
+        <th>Nombre</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-if="cargando">
+        <td colspan="3" class="text-center text-muted">Cargando...</td>
+      </tr>
+      <tr v-else-if="items.length === 0">
+        <td colspan="3" class="text-center text-muted">Sin resultados</td>
+      </tr>
+      <tr v-for="m in items" :key="m.id">
+        <td>{{ m.id }}</td>
+        <td>{{ m.nombre }}</td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-primary" v-on:click="editar(m)">Editar</button>
+          <button class="btn btn-sm btn-outline-danger" v-on:click="eliminar(m)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <nav v-if="totalPages > 1">
+    <ul class="pagination">
+      <li class="page-item" :class="{ disabled: page <= 1 }">
+        <a href="#" class="page-link" v-on:click.prevent="cargar(page - 1)">Anterior</a>
+      </li>
+      <li class="page-item" v-for="i in totalPages" :key="i" :class=" { active: i === page }">
+        <a href="#" class="page-link" v-on:click.prevent="cargar(i)">{{ i }}</a>
+      </li>
+      <li class="page-item" :class="{ disabled: page >= totalPages }">
+        <a href="#" class="page-link" v-on:click.prevent="cargar(page + 1)">Siguiente</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+@section Scripts{
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="~/js/marcas-gestion.js" asp-append-version="true"></script>
+}

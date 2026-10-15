@@ -45,6 +45,6 @@ public class Producto
   //naveg
   public ICollection<DetalleVenta> DetalleVentas { get; set; } = new List<DetalleVenta>();
   public ICollection<DetalleCompra> DetalleCompras { get; set; } = new List<DetalleCompra>();
-  public ICollection<MovimientoStock> Movientos { get; set; } = new List<MovimientoStock>();
+  public ICollection<MovimientoStock> Movimientos { get; set; } = new List<MovimientoStock>();
 
 }
