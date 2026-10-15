@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KioscoPOS.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261006120313_InitialCreate")]
+    [Migration("20261013204309_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -246,6 +246,24 @@ namespace KioscoPOS.Web.Migrations
                     b.ToTable("DetalleVentas");
                 });
 
+            modelBuilder.Entity("KioscoPOS.Web.Models.Marca", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marcas");
+                });
+
             modelBuilder.Entity("KioscoPOS.Web.Models.MovimientoCaja", b =>
                 {
                     b.Property<int>("Id")
@@ -348,6 +366,9 @@ namespace KioscoPOS.Web.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(120)
@@ -374,8 +395,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.HasIndex("CategoriaId");
 
-                    b.HasIndex("CodigoBarras")
-                        .IsUnique();
+                    b.HasIndex("MarcaId");
 
                     b.ToTable("Productos", t =>
                         {
@@ -703,7 +723,15 @@ namespace KioscoPOS.Web.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("KioscoPOS.Web.Models.Marca", "Marca")
+                        .WithMany("Productos")
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Categoria");
+
+                    b.Navigation("Marca");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Venta", b =>
@@ -804,6 +832,11 @@ namespace KioscoPOS.Web.Migrations
             modelBuilder.Entity("KioscoPOS.Web.Models.Compra", b =>
                 {
                     b.Navigation("Detalles");
+                });
+
+            modelBuilder.Entity("KioscoPOS.Web.Models.Marca", b =>
+                {
+                    b.Navigation("Productos");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Producto", b =>
