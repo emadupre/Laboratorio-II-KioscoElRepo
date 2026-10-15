@@ -34,8 +34,7 @@
                                asp-action="Gestion">Categorias (Vue)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Marcas"
-                               asp-action="Gestion">Marcas (Vue)</a>
+                            <a class="nav-link text-dark" asp-controller="Marcas" asp-action="Gestion">Marcas (Vue)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Productos"
@@ -48,10 +47,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Stock" asp-action="Historial">Stock</a>
                         </li>
-                        @if (User.IsInRole("Administrador")){
-                        <li class="nav-item">
-                        <a class="nav-link text-dark" asp-controller="Compras" asp-action="Index">Compras</a>
-                        </li>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Compras" asp-action="Index">Compras</a>
+                            </li>
                         }
                     </ul>
                     <ul class="navbar-nav">
@@ -59,8 +59,8 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                   class="nav-link dropdown-toggle">
-                                    @(User.Identity.Name ?? "Usuario")
+                                   class="nav-link dropdown-toggle d-flex align-items-center gap-2">
+                                    <span>@(User.Identity.Name ?? "Usuario")</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a asp-controller="Cuenta" asp-action="Perfil" class="dropdown-item">Mi perfil</a>

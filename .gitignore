@@ -431,6 +431,7 @@ FodyWeavers.xsd
 # Archivos subidos por usuarios
 wwwroot/uploads/*
 !wwwroot/uploads/.gitkeep
+wwwroot/uploads/avatares
 
 # Secrets / configuración local
 appsettings.Development.json
@@ -442,3 +443,4 @@ KioscoPOS.Web/Migrations/20261013204309_InitialCreate.cs
 KioscoPOS.Web/Migrations/20261013203825_InitialCreate.cs
 
 KioscoPOS.Web/Migrations/20261013203825_InitialCreate.Designer.cs
+KioscoPOS.Web/wwwroot/uploads/avatares/065260c9-9314-4fc9-a374-074c8d43fa0f.jpg

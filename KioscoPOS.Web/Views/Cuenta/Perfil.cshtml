@@ -1,0 +1,65 @@
+@model KioscoPOS.Web.ViewModels.PerfilVM
+@{
+  ViewData["Title"] = "Mi Perfil";
+}
+
+<h2>Mi Perfil</h2>
+
+@if (TempData["Ok"] != null)
+{
+  <div class="alert alert-success">@TempData["Ok"]</div>
+}
+
+<div class="row">
+  <div class="col-md-4">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        @if (!string.IsNullOrEmpty(Model.AvatarPath))
+        {
+          <img src="@Model.AvatarPath" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit:cover"
+               alt="Avatar" />
+        }
+        else
+        {
+          <div class="rounded-circle bg-secondary text-white d-inline-flex align-items-center justify-content-center mb-3"
+               style="width: 150px; height:150px; font-size:60px">
+            @(Model.NombreCompleto?.FirstOrDefault().ToString() ?? "?")
+          </div>
+        }
+        <h5 class="mb-0">@Model.NombreCompleto</h5>
+        <p class="text-muted mb-1">@Model.Email</p>
+        <span class="badge bg-primary">@Model.Rol</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form asp-action="Perfil" method="post" enctype="multipart/form-data">
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+          <div class="mb-3">
+            <label asp-for="NombreCompleto" class="form-label"></label>
+            <input asp-for="NombreCompleto" class="form-control" />
+            <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+          </div>
+
+          <div class="mb-3">
+            <label asp-for="AvatarArchivo" class="form-label"></label>
+            <input asp-for="AvatarArchivo" class="form-control" type="file" accept=".jpg,.jpeg,.png,.webp" />
+            <div class="form-text">JPG, PNG O WEBP, Máximo 2mb.</div>
+            <span asp-validation-for="AvatarArchivo" class="text-danger"></span>
+          </div>
+
+          <button class="btn btn-primary">Guardar cambios</button>
+          <a asp-action="Index" asp-controller="Inicio" class="btn btn-secondary">Cancelar</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}
