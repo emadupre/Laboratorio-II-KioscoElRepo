@@ -714,7 +714,7 @@ namespace KioscoPOS.Web.Migrations
             modelBuilder.Entity("KioscoPOS.Web.Models.MovimientoStock", b =>
                 {
                     b.HasOne("KioscoPOS.Web.Models.Producto", "Producto")
-                        .WithMany("Movientos")
+                        .WithMany("Movimientos")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -860,7 +860,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.Navigation("DetalleVentas");
 
-                    b.Navigation("Movientos");
+                    b.Navigation("Movimientos");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Proveedor", b =>

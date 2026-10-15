@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KioscoPOS.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261015183624_AgregarDatosAnulacionCompra")]
-    partial class AgregarDatosAnulacionCompra
+    [Migration("20261015231540_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -717,7 +717,7 @@ namespace KioscoPOS.Web.Migrations
             modelBuilder.Entity("KioscoPOS.Web.Models.MovimientoStock", b =>
                 {
                     b.HasOne("KioscoPOS.Web.Models.Producto", "Producto")
-                        .WithMany("Movientos")
+                        .WithMany("Movimientos")
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -863,7 +863,7 @@ namespace KioscoPOS.Web.Migrations
 
                     b.Navigation("DetalleVentas");
 
-                    b.Navigation("Movientos");
+                    b.Navigation("Movimientos");
                 });
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Proveedor", b =>
