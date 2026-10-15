@@ -1,0 +1,57 @@
+@using KioscoPOS.Web.ViewModels
+@model CompraCrearVM
+@{ ViewData["Title"] = "Nueva compra"; }
+
+<h2>Nueva compra</h2>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3 position-relative">
+        <label class="form-label">Proveedor</label>
+        <input type="hidden" asp-for="ProveedorId" id="ProveedorId" />
+        <input type="text" id="proveedorBuscar" class="form-control" autocomplete="off"
+               placeholder="Escribí para buscar..." value="@Model.ProveedorNombre" />
+        <ul id="proveedorResultados" class="list-group position-absolute w-100" style="z-index:10"></ul>
+        <span asp-validation-for="ProveedorId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Fecha" class="form-label"></label>
+        <input asp-for="Fecha" class="form-control" />
+        <span asp-validation-for="Fecha" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Crear borrador</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const input = document.getElementById('proveedorBuscar');
+        const lista = document.getElementById('proveedorResultados');
+        const hidden = document.getElementById('ProveedorId');
+        let timer;
+
+        input.addEventListener('input', () => {
+            hidden.value = '';
+            clearTimeout(timer);
+            timer = setTimeout(async () => {
+                const resp = await fetch('/Proveedores/Buscar?term=' + encodeURIComponent(input.value));
+                const items = await resp.json();
+                lista.innerHTML = '';
+                items.forEach(p => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item list-group-item-action';
+                    li.style.cursor = 'pointer';
+                    li.textContent = p.nombre;
+                    li.onclick = () => { input.value = p.nombre; hidden.value = p.id; lista.innerHTML = ''; };
+                    lista.appendChild(li);
+                });
+            }, 300);
+        });
+
+        document.addEventListener('click', e => { if (e.target !== input) lista.innerHTML = ''; });
+    </script>
+}

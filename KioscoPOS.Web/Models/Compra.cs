@@ -25,4 +25,11 @@ public class Compra
 
   // naveg.
   public ICollection<DetalleCompra> Detalles { get; set; } = new List<DetalleCompra>();
+
+  public string? AnuladaPorId { get; set; }
+public ApplicationUser? AnuladaPor { get; set; }
+public DateTime? FechaAnulacion { get; set; }
+
+[StringLength(250)]
+public string? MotivoAnulacion { get; set; }
 }

@@ -160,11 +160,21 @@ namespace KioscoPOS.Web.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AnuladaPorId")
+                        .HasColumnType("varchar(255)");
+
                     b.Property<int>("Estado")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("FechaAnulacion")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("MotivoAnulacion")
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar(250)");
 
                     b.Property<int>("ProveedorId")
                         .HasColumnType("int");
@@ -177,6 +187,8 @@ namespace KioscoPOS.Web.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AnuladaPorId");
 
                     b.HasIndex("ProveedorId");
 
@@ -619,6 +631,10 @@ namespace KioscoPOS.Web.Migrations
 
             modelBuilder.Entity("KioscoPOS.Web.Models.Compra", b =>
                 {
+                    b.HasOne("KioscoPOS.Web.Models.ApplicationUser", "AnuladaPor")
+                        .WithMany()
+                        .HasForeignKey("AnuladaPorId");
+
                     b.HasOne("KioscoPOS.Web.Models.Proveedor", "Proveedor")
                         .WithMany("Compras")
                         .HasForeignKey("ProveedorId")
@@ -630,6 +646,8 @@ namespace KioscoPOS.Web.Migrations
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("AnuladaPor");
 
                     b.Navigation("Proveedor");
 

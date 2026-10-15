@@ -123,4 +123,21 @@ public async Task<IActionResult>Create(Proveedor proveedor)
         var normalizado = new string(cuit.Where(char.IsDigit).ToArray());
         return normalizado.Length == 0 ? null : normalizado;
     }
+
+    [HttpGet]
+public async Task<IActionResult> Buscar(string? term)
+{
+    var query = _context.Proveedores.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(term))
+        query = query.Where(p => p.Nombre.Contains(term));
+
+    var items = await query
+        .OrderBy(p => p.Nombre)
+        .Take(10)
+        .Select(p => new { id = p.Id, nombre = p.Nombre })
+        .ToListAsync();
+
+    return Json(items);
+}
 }

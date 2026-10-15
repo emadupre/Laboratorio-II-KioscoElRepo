@@ -1,0 +1,58 @@
+@using KioscoPOS.Web.Models.Enums
+@model PagedResult<Compra>
+@{ ViewData["Title"] = "Compras"; }
+
+<h2>Compras</h2>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+@if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-3"><input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Proveedor" /></div>
+    <div class="col-md-2">
+        <select name="estado" class="form-select">
+            <option value="">Todos los estados</option>
+            @foreach (var e in Enum.GetValues<EstadoCompra>())
+            {
+                <option value="@e" selected="@(ViewBag.Estado == e)">@e</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2"><input type="date" name="desde" value="@ViewBag.Desde" class="form-control" /></div>
+    <div class="col-md-2"><input type="date" name="hasta" value="@ViewBag.Hasta" class="form-control" /></div>
+    <div class="col-md-3 d-flex gap-2">
+        <button class="btn btn-secondary">Filtrar</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a>
+        <a asp-action="Create" class="btn btn-primary">Nueva</a>
+    </div>
+</form>
+
+<table class="table">
+    <thead><tr><th>#</th><th>Fecha</th><th>Proveedor</th><th>Estado</th><th>Total</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var c in Model.Items)
+    {
+        <tr>
+            <td>@c.Id</td>
+            <td>@c.Fecha.ToString("dd/MM/yyyy")</td>
+            <td>@c.Proveedor.Nombre</td>
+            <td>@c.Estado</td>
+            <td>@c.Total.ToString("C")</td>
+            <td class="text-end"><a asp-action="Detalle" asp-route-id="@c.Id" class="btn btn-sm btn-outline-primary">Ver</a></td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Page ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i"
+                   asp-route-buscar="@ViewBag.Buscar" asp-route-estado="@ViewBag.Estado"
+                   asp-route-desde="@ViewBag.Desde" asp-route-hasta="@ViewBag.Hasta">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
