@@ -31,7 +31,7 @@ public class ProductosController : Controller
         .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(buscar))
-            query = query.Where(p => p.Nombre.Contains(buscar));
+            query = query.Where(p => p.Nombre.Contains(buscar)|| p.CodigoBarras != null && p.CodigoBarras.Contains(buscar));
 
         if (estado == "bajo")
             query = query.Where(p => p.StockActual <= p.StockMinimo);

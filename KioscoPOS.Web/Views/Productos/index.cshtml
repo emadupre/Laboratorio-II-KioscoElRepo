@@ -10,7 +10,7 @@
 @if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
 
 <form method="get" class="d-flex gap-2 mb-3">
-    <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre" />
+    <input name="buscar" value="@ViewBag.Buscar" class="form-control" placeholder="Buscar por nombre o codigo de barra" />
     <select name="estado" class="form-select" style="max-width:180px">
         <option value="" selected="@(ViewBag.Estado == null ? "selected" : null)">Todos</option>
         <option value="bajo" selected="@(ViewBag.Estado == "bajo" ? "selected" : null)">Stock bajo</option>
