@@ -39,6 +39,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IComprasService, CompraService>();
+builder.Services.AddScoped<ICajaService, CajaService>();
 
 var app = builder.Build();
 
