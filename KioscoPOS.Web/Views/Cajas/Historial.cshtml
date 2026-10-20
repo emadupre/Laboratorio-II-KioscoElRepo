@@ -1,0 +1,56 @@
+@model PagedResult<Caja>
+@{ ViewData["Title"] = "Historial de cajas"; }
+
+<h2>Historial de cajas</h2>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+
+<a asp-action="Index" class="btn btn-primary mb-3">Ir a mi caja</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Usuario</th><th>Turno</th><th>Apertura</th><th>Cierre</th>
+            <th class="text-end">Fondo</th><th class="text-end">Esperado</th>
+            <th class="text-end">Contado</th><th class="text-end">Diferencia</th><th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model.Items)
+    {
+        <tr>
+            <td>@c.Usuario.Email</td>
+            <td>@c.Turno</td>
+            <td>@c.FechaApertura.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@(c.FechaCierre?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+            <td class="text-end">$ @c.FondoInicial.ToString("N2")</td>
+            <td class="text-end">@(c.TotalEsperado.HasValue ? "$ " + c.TotalEsperado.Value.ToString("N2") : "-")</td>
+            <td class="text-end">@(c.TotalContado.HasValue ? "$ " + c.TotalContado.Value.ToString("N2") : "-")</td>
+            <td class="text-end">
+                @if (c.Diferencia.HasValue)
+                {
+                    <span class="@(c.Diferencia == 0 ? "" : c.Diferencia > 0 ? "text-success" : "text-danger")">
+                        $ @c.Diferencia.Value.ToString("N2")
+                    </span>
+                }
+                else { <span>-</span> }
+            </td>
+            <td>
+                @if (c.FechaCierre == null) { <span class="badge bg-success">Abierta</span> }
+                else { <span class="badge bg-secondary">Cerrada</span> }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Page ? "active" : "")">
+                <a class="page-link" asp-action="Historial" asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
