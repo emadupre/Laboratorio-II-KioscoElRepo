@@ -437,6 +437,8 @@ wwwroot/uploads/avatares
 appsettings.Development.json
 appsettings.*.local.json
 
+Migrations/
+
 KioscoPOS.Web/Migrations/20261013204309_InitialCreate.Designer.cs
 KioscoPOS.Web/Migrations/20261013204309_InitialCreate.cs
 .gitignore
