@@ -42,7 +42,7 @@ public class MovimientosCajaController : Controller
         if (caja == null)
         {
             TempData["Error"] = cajaId == null ? "No tenés una caja abierta" : "La caja no existe";
-            return RedirectToAction("Index", "Caja");
+            return RedirectToAction("Index", "Cajas");
         }
 
         if (!esAdmin && caja.UsuarioId != userId)
