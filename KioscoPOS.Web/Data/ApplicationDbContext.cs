@@ -64,6 +64,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     .HasForeignKey(c => c.UsuarioId)
     .OnDelete(DeleteBehavior.Restrict);
 
+    b.Entity<Compra>()
+    .HasOne(c => c.AnuladaPor)
+    .WithMany()
+    .HasForeignKey(c => c.AnuladaPorId)
+    .OnDelete(DeleteBehavior.Restrict);
+
     b.Entity<DetalleCompra>()
     .HasOne(d => d.Compra)
     .WithMany(c => c.Detalles)

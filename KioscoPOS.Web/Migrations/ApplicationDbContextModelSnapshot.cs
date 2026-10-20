@@ -633,7 +633,8 @@ namespace KioscoPOS.Web.Migrations
                 {
                     b.HasOne("KioscoPOS.Web.Models.ApplicationUser", "AnuladaPor")
                         .WithMany()
-                        .HasForeignKey("AnuladaPorId");
+                        .HasForeignKey("AnuladaPorId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("KioscoPOS.Web.Models.Proveedor", "Proveedor")
                         .WithMany("Compras")

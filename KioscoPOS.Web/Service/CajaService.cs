@@ -1,7 +1,6 @@
 using KioscoPOS.Web.Data;
 using KioscoPOS.Web.Models;
 using KioscoPOS.Web.Models.Enums;
-using KioscoPOS.Web.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace KioscoPOS.Web.Services;

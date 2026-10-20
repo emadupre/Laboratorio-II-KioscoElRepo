@@ -2,13 +2,14 @@ using System.Globalization;
 using KioscoPOS.Web.Data;
 using KioscoPOS.Web.Models;
 using KioscoPOS.Web.Models.Enums;
-using KioscoPOS.Web.Service;
 using KioscoPOS.Web.Services;
 using KioscoPOS.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
+namespace KioscoPOS.Web.Controllers;
 
 [Authorize]
 public class MovimientosCajaController : Controller
@@ -69,7 +70,10 @@ public class MovimientosCajaController : Controller
             PuedeRegistrar = caja.FechaCierre == null && caja.UsuarioId == userId,
             Movimientos = new PagedResult<MovimientoCaja>
             {
-                Items = items, Page = page, PageSize = PageSize, TotalItems = total
+                Items = items,
+                Page = page,
+                PageSize = PageSize,
+                TotalItems = total
             }
         });
     }

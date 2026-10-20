@@ -114,7 +114,7 @@ public async Task EliminarBorradorAsync(int comprarId)
         {
             await _stock.RegistrarMovimientoAsync(d.ProductoId , d.Cantidad,TipoMovimientoStock.Compra , usuarioId, $"compra #{compra.Id}", compraId : compra.Id);
 
-        var producto = await _context.Productos.FindAsync(d.Producto);
+        var producto = await _context.Productos.FindAsync(d.ProductoId);
         producto!.PrecioCosto = d.CostoUnitario; // este es el ultimo costo de compra
         }
         compra.Estado = EstadoCompra.Confirmada;
