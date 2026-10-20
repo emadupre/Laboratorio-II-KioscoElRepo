@@ -39,6 +39,9 @@
                 @if (c.FechaCierre == null) { <span class="badge bg-success">Abierta</span> }
                 else { <span class="badge bg-secondary">Cerrada</span> }
             </td>
+            <td>
+                <a asp-controller="MovimientosCaja" asp-action="Index" asp-route-cajaId="@c.Id">Movimientos</a>
+            </td>
         </tr>
     }
     </tbody>

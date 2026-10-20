@@ -1,0 +1,79 @@
+@using KioscoPOS.Web.Models.Enums
+@model KioscoPOS.Web.ViewModels.MovimientosCajaVM
+@{
+    ViewData["Title"] = "Movimientos de caja";
+    var caja = Model.Caja;
+}
+
+<h2>Movimientos de caja</h2>
+<p class="text-muted">
+    Caja #@caja.Id · @caja.Usuario.Email · Turno @caja.Turno ·
+    abierta el @caja.FechaApertura.ToString("dd/MM/yyyy HH:mm")
+    @if (caja.FechaCierre != null) { <span class="badge bg-secondary">Cerrada</span> }
+    else { <span class="badge bg-success">Abierta</span> }
+</p>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+@if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
+
+@if (Model.PuedeRegistrar)
+{
+    <form asp-action="Crear" method="post" class="row g-2 mb-4">
+        <input type="hidden" name="cajaId" value="@caja.Id" />
+        <div class="col-md-2">
+            <select name="tipo" class="form-select">
+                @foreach (var t in Enum.GetValues<TipoMovimientoCaja>())
+                {
+                    <option value="@((int)t)">@t</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <input name="monto" type="number" step="0.01" min="0.01" class="form-control"
+                placeholder="Monto" required />
+        </div>
+        <div class="col-md-5">
+            <input name="motivo" maxlength="250" class="form-control"
+                placeholder="Motivo (pago a proveedor, cambio, etc.)" required />
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-primary">Registrar</button>
+            <a asp-controller="Cajas" asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+        </div>
+    </form>
+}
+else
+{
+    <a asp-controller="Cajas" asp-action="Historial" class="btn btn-outline-secondary mb-3">Volver al historial</a>
+}
+
+<table class="table">
+    <thead>
+        <tr><th>Fecha</th><th>Tipo</th><th class="text-end">Monto</th><th>Motivo</th><th>Usuario</th></tr>
+    </thead>
+    <tbody>
+    @foreach (var m in Model.Movimientos.Items)
+    {
+        <tr>
+            <td>@m.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+            <td>@m.Tipo</td>
+            <td class="text-end @(m.Tipo == TipoMovimientoCaja.Ingreso ? "text-success" : "text-danger")">
+                @(m.Tipo == TipoMovimientoCaja.Ingreso ? "+" : "-") $ @m.Monto.ToString("N2")
+            </td>
+            <td>@m.Motivo</td>
+            <td>@m.Usuario.Email</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @for (var i = 1; i <= Model.Movimientos.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.Movimientos.Page ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-cajaId="@caja.Id" asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
