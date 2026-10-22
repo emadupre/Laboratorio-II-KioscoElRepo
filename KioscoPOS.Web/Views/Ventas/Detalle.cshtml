@@ -1,0 +1,64 @@
+@using KioscoPOS.Web.Models.Enums
+@model Venta
+@{ ViewData["Title"] = "Venta #" + Model.Id; }
+
+<h2>Venta #@Model.Id
+    @if (Model.Estado == EstadoVenta.Confirmada) { <span class="badge bg-success">Confirmada</span> }
+    else { <span class="badge bg-danger">Anulada</span> }
+</h2>
+
+@if (TempData["Ok"] != null) { <div class="alert alert-success">@TempData["Ok"]</div> }
+@if (TempData["Error"] != null) { <div class="alert alert-danger">@TempData["Error"]</div> }
+
+<p class="text-muted">
+    @Model.FechaHora.ToString("dd/MM/yyyy HH:mm") · Cajero: @Model.Usuario.Email · Pago: @Model.MedioPago
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Producto</th><th class="text-end">Cantidad</th>
+            <th class="text-end">Precio</th><th class="text-end">Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var d in Model.Detalles)
+    {
+        <tr>
+            <td>@d.Producto.Nombre</td>
+            <td class="text-end">@d.Cantidad</td>
+            <td class="text-end">$ @d.PrecioUnitario.ToString("N2")</td>
+            <td class="text-end">$ @((d.Cantidad * d.PrecioUnitario).ToString("N2"))</td>
+        </tr>
+    }
+    </tbody>
+    <tfoot>
+        <tr class="fw-bold">
+            <td colspan="3" class="text-end">Total</td>
+            <td class="text-end">$ @Model.Total.ToString("N2")</td>
+        </tr>
+    </tfoot>
+</table>
+
+@if (Model.Estado == EstadoVenta.Anulada)
+{
+    <div class="alert alert-secondary">
+        <strong>Anulada</strong> el @Model.FechaAnulacion?.ToString("dd/MM/yyyy HH:mm")
+        por @ViewBag.AnuladaPor<br />
+        Motivo: @Model.MotivoAnulacion
+    </div>
+}
+else if (User.IsInRole(Roles.Administrador))
+{
+    <form asp-action="Anular" asp-route-id="@Model.Id" method="post" class="row g-2 mb-3"
+        onsubmit="return confirm('¿Anular la venta? Se devolverá el stock.');">
+        <div class="col-md-6">
+            <input name="motivo" maxlength="250" class="form-control" placeholder="Motivo de la anulación" required />
+        </div>
+        <div class="col-md-3">
+            <button class="btn btn-outline-danger">Anular venta</button>
+        </div>
+    </form>
+}
+
+<a asp-action="Index" class="btn btn-outline-secondary">Volver al listado</a>

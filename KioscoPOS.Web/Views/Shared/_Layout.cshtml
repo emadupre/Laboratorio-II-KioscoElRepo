@@ -23,32 +23,35 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Inicio"
-                               asp-action="Index">Inicio</a>
+                                asp-action="Index">Inicio</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categorias"
-                               asp-action="index">Categorias</a>
+                                asp-action="index">Categorias</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categorias"
-                               asp-action="Gestion">Categorias (Vue)</a>
+                                asp-action="Gestion">Categorias (Vue)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Marcas" asp-action="Gestion">Marcas (Vue)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Productos"
-                               asp-action="index">Productos</a>
+                                asp-action="index">Productos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Proveedores"
-                               asp-action="index">Proveedores</a>
+                                asp-action="index">Proveedores</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Stock" asp-action="Historial">Stock</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-controller="Cajas" asp-action="Index">Caja</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Ventas" asp-action="Index">Ventas</a>
                         </li>
                         @if (User.IsInRole("Administrador"))
                         {
@@ -62,7 +65,7 @@
                         {
                             <li class="nav-item dropdown">
                                 <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                   class="nav-link dropdown-toggle d-flex align-items-center gap-2">
+                                    class="nav-link dropdown-toggle d-flex align-items-center gap-2">
                                     <span>@(User.Identity.Name ?? "Usuario")</span>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -73,7 +76,7 @@
                                     </li>
                                     <li>
                                         <form asp-controller="Cuenta" asp-action="CerrarSesion" method="post"
-                                              class="d-inline">
+                                                class="d-inline">
                                             <button type="submit" class="dropdown-item">Cerrar Sesion</button>
                                         </form>
                                     </li>
