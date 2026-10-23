@@ -1,0 +1,95 @@
+@using KioscoPOS.Web.Models.Enums
+@{
+    ViewData["Title"] = "Nueva venta";
+}
+
+<div id="app-venta">
+    <h2>Nueva venta <small class="text-muted fs-6">(carrito con Vue.js)</small></h2>
+
+    <div v-if="mensajeError" class="alert alert-danger">{{ mensajeError }}</div>
+    <div v-if="ventaOk" class="alert alert-success">
+        Venta #{{ ventaOk }} registrada.
+        <a :href="'/Ventas/Detalle/' + ventaOk">Ver detalle</a>
+    </div>
+
+    <div class="position-relative mb-3" style="max-width:600px">
+        <input ref="entrada" v-model="termino" v-on:input="buscarSugerencias" v-on:keyup.enter="enter"
+                class="form-control form-control-lg" autofocus autocomplete="off"
+                placeholder="Escaneá el código de barras o escribí el nombre..." />
+
+        <ul v-if="sugerencias.length > 0" class="list-group position-absolute w-100 shadow" style="z-index:10">
+            <li v-for="p in sugerencias" :key="p.id" class="list-group-item list-group-item-action"
+                style="cursor:pointer" v-on:click="agregar(p)">
+                <div class="d-flex justify-content-between">
+                    <span>{{ p.nombre }}</span>
+                    <span>$ {{ dinero(p.precioVenta) }}</span>
+                </div>
+                <small :class="p.stockActual > 0 ? 'text-muted' : 'text-danger'">
+                    {{ p.stockActual > 0 ? 'Stock: ' + p.stockActual : 'Sin stock' }}
+                </small>
+            </li>
+        </ul>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th class="text-end">Precio</th>
+                <th style="width:160px">Cantidad</th>
+                <th class="text-end">Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-if="carrito.length === 0">
+                <td colspan="5" class="text-center text-muted">El carrito está vacío</td>
+            </tr>
+            <tr v-for="item in carrito" :key="item.productoId">
+                <td>{{ item.nombre }}</td>
+                <td class="text-end">$ {{ dinero(item.precioVenta) }}</td>
+                <td>
+                    <div class="input-group input-group-sm">
+                        <button class="btn btn-outline-secondary"
+                                v-on:click="cambiarCantidad(item, item.cantidad - 1)">-</button>
+                        <input type="number" min="1" class="form-control text-center" :value="item.cantidad"
+                                v-on:change="cambiarCantidad(item, $event.target.value)" />
+                        <button class="btn btn-outline-secondary"
+                                v-on:click="cambiarCantidad(item, item.cantidad + 1)">+</button>
+                    </div>
+                </td>
+                <td class="text-end">$ {{ dinero(item.cantidad * item.precioVenta) }}</td>
+                <td class="text-end">
+                    <button class="btn btn-sm btn-outline-danger" v-on:click="quitar(item)">Quitar</button>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold fs-5">
+                <td colspan="3" class="text-end">Total</td>
+                <td class="text-end">$ {{ dinero(total) }}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <div class="d-flex gap-2 align-items-center" style="max-width:600px">
+        <select v-model.number="medioPago" class="form-select">
+            @foreach (var m in Enum.GetValues<MedioPago>())
+            {
+                <option value="@((int)m)">@m</option>
+            }
+        </select>
+        <button class="btn btn-success btn-lg" v-on:click="confirmar" :disabled="cargando || carrito.length === 0">
+            Confirmar venta
+        </button>
+        <button class="btn btn-outline-secondary" v-on:click="vaciar" :disabled="cargando || carrito.length === 0">
+            Vaciar
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="~/js/ventas-nueva.js" asp-append-version="true"></script>
+}
