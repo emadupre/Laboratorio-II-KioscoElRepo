@@ -40,6 +40,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddScoped<IComprasService, CompraService>();
 builder.Services.AddScoped<ICajaService, CajaService>();
+builder.Services.AddScoped<IVentaService, VentaService>();
 
 var app = builder.Build();
 
