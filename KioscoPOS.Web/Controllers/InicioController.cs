@@ -26,7 +26,7 @@ public class InicioController : Controller
 
     public async Task<IActionResult> Index()
     {
-        if (!User.Identity?.IsAuthenticated ?? true) return View(new InicioVM());
+        if (!User.Identity?.IsAuthenticated != true) return View(new InicioVM());
 
         var userId = _userManager.GetUserId(User)!;
         var hoy = DateTime.Today;

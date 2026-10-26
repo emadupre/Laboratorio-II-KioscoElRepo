@@ -1,0 +1,410 @@
+{
+    "info": {
+        "_postman_id": "6853adfd-f50b-4a10-806e-316c8018ffa7",
+        "name": "Kiosco API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "1. Auth",
+            "item": [
+                {
+                    "name": "Login Admin",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:5093/api/auth/login",
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\": \"admin@kiosco.com\",\n  \"password\": \"Admin#2026\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login Cajero",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:5093/api/auth/login",
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\": \"cajero@kiosco.com\",\n  \"password\": \"Cajero#2026\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "Login Invalido (401)",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "http://localhost:5093/api/auth/login",
+                            "path": [
+                                "api",
+                                "auth",
+                                "login"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"email\": \"admin@kiosco.com\",\n  \"password\": \"chicharito123\"\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Productos",
+            "item": [
+                {
+                    "name": "Listar Productos",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/productos",
+                            "path": [
+                                "api",
+                                "productos"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar Productos con Busqueda",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/productos?buscar=coca&page=1&pageSize=5",
+                            "query": [
+                                {
+                                    "key": "buscar",
+                                    "value": "coca"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "5"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "productos"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Detalle Producto",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/productos/1",
+                            "path": [
+                                "api",
+                                "productos",
+                                "1"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Producto No Existe",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/productos/99999",
+                            "path": [
+                                "api",
+                                "productos",
+                                "99999"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Sin Token",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/productos",
+                            "path": [
+                                "api",
+                                "productos"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Categorías",
+            "item": [
+                {
+                    "name": "Listar Categorias",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/categorias",
+                            "path": [
+                                "api",
+                                "categorias"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Detalle Categoría",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/categorias/1",
+                            "path": [
+                                "api",
+                                "categorias",
+                                "1"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Marcas",
+            "item": [
+                {
+                    "name": "Listar Marcas",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/marcas",
+                            "path": [
+                                "api",
+                                "marcas"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Detalle Marca",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/marcas/1",
+                            "path": [
+                                "api",
+                                "marcas",
+                                "1"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Buscar Marcas",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "http://localhost:5093/api/marcas?buscar=coca",
+                            "query": [
+                                {
+                                    "key": "buscar",
+                                    "value": "coca"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "api",
+                                "marcas"
+                            ],
+                            "protocol": "http",
+                            "host": [
+                                "localhost"
+                            ],
+                            "port": "5093"
+                        },
+                        "auth": {
+                            "type": "bearer",
+                            "bearer": [
+                                {
+                                    "key": "token",
+                                    "value": "{{ token }}",
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
