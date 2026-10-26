@@ -1,18 +1,93 @@
-﻿@{
+﻿@model KioscoPOS.Web.ViewModels.InicioVM
+
+@{
     ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Kiosco 24hs</h1>
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <h1 class="mb-4">Bienvenido, @User.Identity.Name</h1>
 
-    @if (User.Identity?.IsAuthenticated == true)
-    {
-        <p class="lead">Bienvenido, @User.Identity.Name.</p>
-        <p>Usá el navbar para navegar.</p>
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body">
+                    <div class="text-muted small">Productos</div>
+                    <div class="display-6 fw-bold">@Model.TotalProductos</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div
+                class="card shadow-sm border-0 h-100 @(Model.ProductosStockBajo > 0 ? "border-start border-danger border-4" : "")">
+                <div class="card-body">
+                    <div class="text-muted small">Stock bajo</div>
+                    <div class="display-6 fw-bold @(Model.ProductosStockBajo > 0 ? "text-danger" : "")">
+                        @Model.ProductosStockBajo</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small">Ventas hoy</div>
+                        <div class="display-6 fw-bold">@Model.VentasHoy</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small">Total hoy</div>
+                        <div class="display-6 fw-bold text-success">
+                            $ @Model.TotalVentasHoy.ToString("N0")
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="mb-3">Accesos rápidos</h4>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            @if (!Model.TieneCajaAbierta)
+            {
+                <a asp-controller="Cajas" asp-action="Index" class="btn btn-warning">Abrir caja</a>
+            }
+            else
+            {
+                <a asp-controller="Ventas" asp-action="Nueva" class="btn btn-success">
+                    Nueva Venta
+                </a>
+                <a asp-controller="Cajas" asp-action="Index" class="btn btn-outline-secondary">
+                    Mi caja
+                </a>
+            }
+            <a asp-controller="Productos" asp-action="Index" class="btn btn-outline-primary">
+                Productos
+            </a>
+            @if (Model.EsAdmin)
+            {
+                <a asp-controller="Compras" asp-action="Create" class="btn btn-outline-primary">
+                    Nueva compra
+                </a>
+                <a asp-controller="Stock" asp-action="Historial" class="btn btn-outline-secondary">
+                    Historial de stock
+                </a>
+            }
+        </div>
+        @if (Model.ProductosStockBajo > 0)
+        {
+            <div class="alert alert-warning">
+                Tenés <strong>@Model.ProductosStockBajo</strong> producto(s) con stock bajo.
+                <a asp-controller="Productos" asp-action="Index" asp-route-estado="bajo">Ver listado</a>
+            </div>
+        }
     }
-    else
+else
     {
-        <p class="lead">Sistema de punto de venta.</p>
-        <a asp-controller="Cuenta" asp-action="IniciarSesion" class="btn btn-primary">Iniciar sesion</a>
+        <div class="text-center py-5">
+            <h1 class="display-4">Kiosco 24hs</h1>
+            <p class="lead">Sistema de punto de venta.</p>
+            <a asp-controller="Cuenta" asp-action="IniciarSesion" class="btn btn-primary">Iniciar sesion</a>
+        </div>
     }
-</div>

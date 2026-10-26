@@ -16,7 +16,7 @@
             <option value="">Todas</option>
             @foreach (var e in Enum.GetValues<EstadoVenta>())
             {
-                <option value="@((int)e)" selected="@(estado == e)">@e</option>
+                <option value="@((int)e)" selected="@(estado == e ? "selected" : null)">@e</option>
             }
         </select>
     </form>

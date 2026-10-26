@@ -57,8 +57,8 @@
             <td class="text-end">
                 @if (borrador)
                 {
-                    <form asp-action="QuitarItem" asp-route-id="@Model.Id" method="post" class="d-inline">
-                        <input type="hidden" name="detalleId" value="@d.Id" />
+                    <form asp-action="QuitarItems" asp-route-id="@Model.Id" method="post" class="d-inline">
+                        <input type="hidden" name="detalleID" value="@d.Id" />
                         <button class="btn btn-sm btn-outline-danger">Quitar</button>
                     </form>
                 }

@@ -35,7 +35,7 @@
         let timer;
 
         input.addEventListener('input', () => {
-            hidden.value = '';
+            hidden.value = 0;
             clearTimeout(timer);
             timer = setTimeout(async () => {
                 const resp = await fetch('/Proveedores/Buscar?term=' + encodeURIComponent(input.value));
