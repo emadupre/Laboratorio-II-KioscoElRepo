@@ -5,6 +5,7 @@ Sistema POS para Kiosco 24hs
 ```mermaid
 erDiagram
     CATEGORIA       ||--o{ PRODUCTO         : clasifica
+    MARCA           ||--o{ PRODUCTO         : agrupa
     PROVEEDOR       ||--o{ COMPRA           : provee
     COMPRA          ||--o{ DETALLECOMPRA    : contiene
     PRODUCTO        ||--o{ DETALLECOMPRA    : incluido_en
@@ -23,9 +24,14 @@ erDiagram
         int     Id PK
         string  Nombre
     }
+    MARCA {
+        int     Id PK
+        string  Nombre
+    }
     PRODUCTO {
         int      Id PK
         int      CategoriaId FK
+        int      MarcaId FK
         string   Nombre
         string   CodigoBarras
         decimal  PrecioCosto
@@ -48,6 +54,9 @@ erDiagram
         datetime Fecha
         int      Estado
         decimal  Total
+        string   AnuladaPorId FK
+        datetime FechaAnulacion
+        string   MotivoAnulacion
     }
     DETALLECOMPRA {
         int      Id PK
@@ -64,7 +73,7 @@ erDiagram
         int      MedioPago
         int      Estado
         decimal  Total
-        string   AnuladaPorId
+        string   AnuladaPorId FK
         datetime FechaAnulacion
         string   MotivoAnulacion
     }
