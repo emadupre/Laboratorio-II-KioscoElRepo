@@ -441,3 +441,5 @@ main.container {
   background: #059669;
   color: white;
 }
+/*destello de plantilla sin compilar*/
+[v-cloak] { display: none !important; }
