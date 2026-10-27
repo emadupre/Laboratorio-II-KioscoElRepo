@@ -40,7 +40,8 @@
                 else { <span class="badge bg-secondary">Cerrada</span> }
             </td>
             <td>
-                <a asp-controller="MovimientosCaja" asp-action="Index" asp-route-cajaId="@c.Id">Movimientos</a>
+                    <a asp-controller="MovimientosCaja" asp-action="Index" asp-route-cajaId="@c.Id"
+                       class="btn btn-sm btn-outline-primary"><i class="bi bi-arrows"></i> Movimientos</a>
             </td>
         </tr>
     }
