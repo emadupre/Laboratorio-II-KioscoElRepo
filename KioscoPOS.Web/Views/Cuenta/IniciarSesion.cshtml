@@ -4,43 +4,58 @@
   Layout = "_Layout";
 }
 
-<div class="row justify-content-center mt-5">
-  <div class="col-md-5">
-    <div class="card shadow-sm">
-      <div class="card-body p-4">
-        <h3 class="card-title text-center mb-4">Kiosco 24hs</h3>
+<div class="kp-auth-wrapper">
+  <div class="card kp-auth-card">
+    <div class="kp-auth-hero">
+      <i class="bi bi-show-window"></i>
+      <h3 class="mb-0">KioscoPOS</h3>
+      <p class="mb-0 opacity-75 small">Sistema de gestión para kioscos 24hs</p>
+    </div>
+    <div class="card-body p-4">
+      <h5 class="mb-4 fw-bold">Iniciar sesión</h5>
+      
+      <form asp-action="IniciarSesion" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-        <form asp-action="IniciarSesion" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-          <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-
-          <div class="mb-3">
-            <label asp-for="Email" class="form-label"></label>
+        <div class="mb-3">
+          <label asp-for="Email" class="form-label"></label>
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-envelope"></i></span>
             <input asp-for="Email" class="form-control" autofocus />
-            <span asp-validation-for="Email" class="text-danger"></span>
           </div>
+          <span asp-validation-for="Email" class="text-danger small"></span>
+        </div>
 
-          <div class="mb-3">
-            <label asp-for="Password" class="form-label"></label>
-            <input asp-for="Password" class="form-control" />
-            <span asp-validation-for="Password" class="text-danger"></span>
+        <div class="mb-3">
+          <label asp-for="Password" class="form-label"></label>
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
+            <input asp-for="Password" class="form-control" placeholder="*********" />
           </div>
+          <span asp-validation-for="Password" class="text-danger small"></span>
+        </div>
 
-          <div class="form-check mb-3">
-            <input asp-for="RememberMe" class="form-check-input" />
-            <label asp-for="RememberMe" class="form-check-label"></label>
-          </div>
+        <div class="form-check mb-3">
+          <input asp-for="RememberMe" class="form-check-input" />
+          <label asp-for="RememberMe" class="form-check-label small"></label>
+        </div>
 
-          <button type="submit" class="btn btn-primary w-100">Entrar</button>
-        </form>
+        <button type="submit" class="btn btn-primary w-100 py-2">
+          Entrar <i class="bi bi-arrow-right"></i>
+        </button>
+      </form>
+
+      <div class="text-center mt-4 pt-3 border-top">
+        <p class="text-muted small mb-1">Usuarios de prueba:</p>
+        <div class="small text-muted">
+          <div><i class="bi bi-person-badge"></i> admin@kiosco.com / Admin#2026</div>
+          <div><i class="bi bi-person"></i> cajero@kiosco.com / Cajero#2026</div>
+        </div>
       </div>
     </div>
-
-    <p class="text-muted text-center mt-3 small">
-      admin@kiosco.com / Admin#2026 · cajero@kiosco.com / Cajero#2026
-    </p>
   </div>
 </div>
 
-@section Scripts{
+@section Scripts {
   <partial name="_ValidationScriptsPartial" />
 }
