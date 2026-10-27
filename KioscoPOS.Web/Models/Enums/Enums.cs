@@ -2,7 +2,7 @@ namespace KioscoPOS.Web.Models.Enums;
 
 public enum Turno
 {
-  Manana = 1,
+  Mañana = 1,
   Tarde = 2,
   Noche = 3
 }

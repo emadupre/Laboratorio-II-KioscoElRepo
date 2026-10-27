@@ -14,8 +14,8 @@
 
     <div class="position-relative mb-3" style="max-width:600px">
         <input ref="entrada" v-model="termino" v-on:input="buscarSugerencias" v-on:keyup.enter="enter"
-                class="form-control form-control-lg" autofocus autocomplete="off"
-                placeholder="Escaneá el código de barras o escribí el nombre..." />
+               class="form-control form-control-lg" autofocus autocomplete="off"
+               placeholder="Escaneá el código de barras o escribí el nombre..." />
 
         <ul v-if="sugerencias.length > 0" class="list-group position-absolute w-100 shadow" style="z-index:10">
             <li v-for="p in sugerencias" :key="p.id" class="list-group-item list-group-item-action"
@@ -53,7 +53,7 @@
                         <button class="btn btn-outline-secondary"
                                 v-on:click="cambiarCantidad(item, item.cantidad - 1)">-</button>
                         <input type="number" min="1" class="form-control text-center" :value="item.cantidad"
-                                v-on:change="cambiarCantidad(item, $event.target.value)" />
+                               v-on:change="cambiarCantidad(item, $event.target.value)" />
                         <button class="btn btn-outline-secondary"
                                 v-on:click="cambiarCantidad(item, item.cantidad + 1)">+</button>
                     </div>
@@ -74,18 +74,16 @@
     </table>
 
     <div class="d-flex gap-2 align-items-center" style="max-width:600px">
-        <select v-model.number="medioPago" class="form-select">
+        <select v-model.number="medioPago" class="form-select form-select-lg">
             @foreach (var m in Enum.GetValues<MedioPago>())
             {
                 <option value="@((int)m)">@m</option>
             }
         </select>
-        <button class="btn btn-success btn-lg" v-on:click="confirmar" :disabled="cargando || carrito.length === 0">
-            Confirmar venta
-        </button>
-        <button class="btn btn-outline-secondary" v-on:click="vaciar" :disabled="cargando || carrito.length === 0">
-            Vaciar
-        </button>
+        <button class="btn btn-success btn-lg text-nowrap" v-on:click="confirmar"
+                :disabled="cargando || carrito.length === 0"><i class="bi bi-check-circle"></i> Confirmar venta</button>
+        <button class="btn btn-outline-secondary btn-lg text-nowrap" v-on:click="vaciar"
+                :disabled="cargando || carrito.length === 0"><i class="bi bi-trash"></i> Vaciar</button>
     </div>
 </div>
 
