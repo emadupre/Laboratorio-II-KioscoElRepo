@@ -92,7 +92,7 @@
                                                                         <span class="rounded-circle d-inline-flex align-items-center justify-content-center"
                                                                               style="width:32px;height:32px;background:var(--kp-primary);color:white;font-weight:700;font-size:.85rem">@(User.Identity.Name?.FirstOrDefault().ToString().ToUpper()
                                                                               ?? "?")</span>
-                                                                            <span>@(User.Identity.Name ?? "Usuario")</span>
+                                                                            <span>@(User.Identity?.Name?.Split('@')[0])</span>
                                                                         </a>
                                                                         <ul class="dropdown-menu dropdown-menu-end">
                                                                             <li><a asp-controller="Cuenta" asp-action="Perfil" class="dropdown-item"><i
