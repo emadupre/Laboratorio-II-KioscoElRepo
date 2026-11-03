@@ -8,7 +8,7 @@
 {
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-1">Hola, @(User.Identity?.Name?.Split('@')[0])</h2>
+            <h2 class="mb-1">Hola, @Model.NombreCompleto </h2>
             <p class="text-muted mb-0">El resumen de hoy es este:</p>
         </div>
         <div class="text-end">
@@ -102,7 +102,7 @@ else
             <div class="text-center">
                 <i class="bi bi-shop-window" style="font-size: 4rem;color:var(--kp-primary)"></i>
                 <h1 class="mt-3">KioscoPOS</h1>
-                <p class="lead text-muted">Sistema de punto de venta para kioscos 25hs.</p>
+                <p class="lead text-muted">Sistema de punto de venta para kioscos 24hs.</p>
                 <a asp-controller="Cuenta" asp-action="IniciarSesion" class="btn btn-primary btn-lg mt-2 px-4">
                     <i class="bi bi-box-arrow-in-right"></i> Iniciar sesion
                 </a>

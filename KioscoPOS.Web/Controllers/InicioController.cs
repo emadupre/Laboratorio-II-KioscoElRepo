@@ -26,18 +26,28 @@ public class InicioController : Controller
 
     public async Task<IActionResult> Index()
     {
-        if (!User.Identity?.IsAuthenticated != true) return View(new InicioVM());
+        if (User.Identity?.IsAuthenticated != true) return View(new InicioVM());
 
-        var userId = _userManager.GetUserId(User)!;
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return View(new InicioVM());
+
         var hoy = DateTime.Today;
+        var manana = hoy.AddDays(1);
 
         var vm = new InicioVM
         {
+            NombreCompleto = !string.IsNullOrWhiteSpace(user.NombreCompleto) ? user.NombreCompleto : (user.UserName ?? "Usuario"),
             TotalProductos = await _context.Productos.CountAsync(),
             ProductosStockBajo = await _context.Productos.CountAsync(p => p.StockActual <= p.StockMinimo),
-            VentasHoy = await _context.Ventas.CountAsync(v => v.FechaHora.Date == hoy && v.Estado == EstadoVenta.Confirmada),
-            TotalVentasHoy = await _context.Ventas.Where(v => v.FechaHora.Date == hoy && v.Estado == EstadoVenta.Confirmada).SumAsync(v => (decimal?)v.Total) ?? 0m,
-            TieneCajaAbierta = await _cajaService.ObtenerCajaAbiertaAsync(userId) != null,
+            VentasHoy = await _context.Ventas.CountAsync(v =>
+                v.FechaHora >= hoy &&
+                v.FechaHora < manana &&
+                v.Estado == EstadoVenta.Confirmada),
+            TotalVentasHoy = await _context.Ventas.Where(v =>
+                v.FechaHora >= hoy &&
+                v.FechaHora < manana &&
+                v.Estado == EstadoVenta.Confirmada).SumAsync(v => (decimal?)v.Total) ?? 0m,
+            TieneCajaAbierta = await _cajaService.ObtenerCajaAbiertaAsync(user.Id) != null,
             EsAdmin = User.IsInRole(Roles.Administrador)
         };
 

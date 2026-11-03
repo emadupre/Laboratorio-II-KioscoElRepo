@@ -2,6 +2,7 @@ namespace KioscoPOS.Web.ViewModels;
 
 public class InicioVM
 {
+  public string NombreCompleto { get; set; } = "Usuario";
   public int TotalProductos { get; set; }
   public int ProductosStockBajo { get; set; }
   public int VentasHoy { get; set; }
