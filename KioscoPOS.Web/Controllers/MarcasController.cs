@@ -19,7 +19,7 @@ public class MarcasController : Controller
   }
 
   //vista vue
-  public IActionResult Gestion() => View();
+  public IActionResult Index() => View();
 
   //endpoint json
 
