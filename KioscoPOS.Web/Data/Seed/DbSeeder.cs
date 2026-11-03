@@ -68,6 +68,97 @@ public static class DbSeeder
       );
       await db.SaveChangesAsync();
     }
+    // productos pre cargados 
+
+    var categoriasDemo = new List<string> { "Bebidas", "Golosinas", "Snacks" };
+    var categoriasExistentes = await db.Categorias
+      .Where(c => categoriasDemo.Contains(c.Nombre))
+      .Select(c => c.Nombre)
+      .ToListAsync();
+    foreach (var nombre in categoriasDemo.Except(categoriasExistentes))
+    {
+      db.Categorias.Add(new Categoria { Nombre = nombre });
+    }
+
+    var marcasDemo = new List<string> { "Coca-Cola", "Arcor", "Pepsi" };
+    var marcasExistentes = await db.Marcas
+      .Where(m => marcasDemo.Contains(m.Nombre))
+      .Select(m => m.Nombre)
+      .ToListAsync();
+    foreach (var nombre in marcasDemo.Except(marcasExistentes))
+    {
+      db.Marcas.Add(new Marca { Nombre = nombre });
+    }
+
+    var proveedoresDemo = new List<string>
+    {
+      "Distribuidora Central",
+      "Bebidas del Sur",
+      "Mayorista Don Juan"
+    };
+    var proveedoresExistentes = await db.Proveedores
+      .Where(p => proveedoresDemo.Contains(p.Nombre))
+      .Select(p => p.Nombre)
+      .ToListAsync();
+    foreach (var nombre in proveedoresDemo.Except(proveedoresExistentes))
+    {
+      db.Proveedores.Add(new Proveedor { Nombre = nombre });
+    }
+
+    await db.SaveChangesAsync();
+
+    var categoriaPorNombre = await db.Categorias
+      .Where(c => categoriasDemo.Contains(c.Nombre))
+      .ToDictionaryAsync(c => c.Nombre);
+    var marcaPorNombre = await db.Marcas
+      .Where(m => marcasDemo.Contains(m.Nombre))
+      .ToDictionaryAsync(m => m.Nombre);
+
+    var productosDemo = new[]
+    {
+      new Producto
+      {
+        Nombre = "Gaseosa Coca-Cola 500 ml",
+        CodigoBarras = "7790895000994",
+        CategoriaId = categoriaPorNombre["Bebidas"].Id,
+        MarcaId = marcaPorNombre["Coca-Cola"].Id,
+        PrecioCosto = 900,
+        PrecioVenta = 1500,
+        StockActual = 20,
+        StockMinimo = 5
+      },
+      new Producto
+      {
+        Nombre = "Alfajor Bon o Bon",
+        CodigoBarras = "7790580114405",
+        CategoriaId = categoriaPorNombre["Golosinas"].Id,
+        MarcaId = marcaPorNombre["Arcor"].Id,
+        PrecioCosto = 500,
+        PrecioVenta = 900,
+        StockActual = 30,
+        StockMinimo = 5
+      },
+      new Producto
+      {
+        Nombre = "Papas Lay's clásicas 150 g",
+        CodigoBarras = "7790310987654",
+        CategoriaId = categoriaPorNombre["Snacks"].Id,
+        MarcaId = marcaPorNombre["Pepsi"].Id,
+        PrecioCosto = 1200,
+        PrecioVenta = 1900,
+        StockActual = 15,
+        StockMinimo = 5
+      }
+    };
+
+    var nombresProductosDemo = productosDemo.Select(p => p.Nombre).ToList();
+    var productosExistentes = await db.Productos
+      .Where(p => nombresProductosDemo.Contains(p.Nombre))
+      .Select(p => p.Nombre)
+      .ToListAsync();
+    db.Productos.AddRange(productosDemo
+      .Where(p => !productosExistentes.Contains(p.Nombre)));
+    await db.SaveChangesAsync();
   }
 
   private static async Task CrearUsuarioAsync(
