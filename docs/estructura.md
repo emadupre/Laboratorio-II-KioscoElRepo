@@ -175,8 +175,6 @@ Laboratorio-II-KioscoElRepo/
 │
 ├── docs/
 │   ├── narrativa.md                  # problemática, propuesta, reglas de negocio
-│   ├── requisitos.md                 # RF, RNF, alcance, casos de uso
-│   ├── decisiones.md                 # justificación de decisiones técnicas
 │   ├── estructura.md                 # este documento
 │   ├── diagrama-er.md                # DER + descripción de entidades y relaciones
 │   └── evidencias/                   # capturas y GIFs para el README
@@ -230,8 +228,6 @@ Contiene el dump SQL con estructura y datos de prueba (usuarios demo, categoría
 Documentación del proyecto:
 
 - narrativa del negocio.
-- requisitos funcionales.
-- decisiones de diseño.
 - diagrama entidad-relación.
 - estructura del proyecto.
 - evidencias referenciaados en el README.
