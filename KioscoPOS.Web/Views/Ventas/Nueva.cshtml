@@ -52,8 +52,9 @@
                     <div class="input-group input-group-sm">
                         <button class="btn btn-outline-secondary"
                                 v-on:click="cambiarCantidad(item, item.cantidad - 1)">-</button>
-                        <input type="number" min="1" class="form-control text-center" :value="item.cantidad"
-                               v-on:change="cambiarCantidad(item, $event.target.value)" />
+                        <input type="number" min="1" :max="item.stockActual" class="form-control text-center"
+                               v-model.number="item.cantidad" v.on:change="validadCantidad(item)"
+                               v-on:blur="validarCantidad(item)" />
                         <button class="btn btn-outline-secondary"
                                 v-on:click="cambiarCantidad(item, item.cantidad + 1)">+</button>
                     </div>
