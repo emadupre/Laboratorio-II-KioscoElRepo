@@ -44,14 +44,7 @@ Se crean automáticamente al ejecutar el seeder (o al importar el dump).
 |---|---|---|
 | Administrador | `admin@kiosco.com` | `Admin#2026` |
 | Empleado | `cajero@kiosco.com` | `Cajero#2026` |
- 
-**Qué puede hacer cada rol:**
- 
-| Funcionalidad | Administrador | Empleado |
-|---|:---:|:---:|
-| Ventas, caja, consulta de productos | ✅ | ✅ |
-| Compras (alta, confirmación y anulación) | ✅ | ❌ |
- 
+
 ---
  
 ## Instalación y ejecución local
