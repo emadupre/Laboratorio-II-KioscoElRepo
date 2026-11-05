@@ -148,6 +148,7 @@ La aplicación web no consume la API, por lo que se incluye una colección de Po
 - **1:N:** `Categoria → Producto`, `Marca → Producto`, `Proveedor → Compra`, `Caja → Venta`, `Caja → MovimientoCaja`.
 - **N:M:** `Venta ↔ Producto` mediante `DetalleVenta` y `Compra ↔ Producto` mediante `DetalleCompra`. Ambas tablas intermedias tienen atributos propios (cantidad, precio o costo unitario).
 - `Venta`, `Compra` y `Caja` dependen además de `ApplicationUser`.
+
 **2. Seguridad.** ASP.NET Core Identity con cookies. Los roles se crean en `DbSeeder`. La anulación de compras está restringida al rol Administrador mediante `[Authorize(Roles = ...)]`. Un Empleado que accede por URL a una ruta de Admin es redirigido a `AccesoDenegado`. El avatar se sube desde `Cuenta/Perfil` y se guarda en `wwwroot/uploads/avatares/`.
  
 **3. Archivos.** Las imágenes de productos se guardan en `wwwroot/uploads/productos/` con nombre GUID (no se usa el nombre original del archivo). Se valida `<EXTENSIONES_PERMITIDAS>` y un tamaño máximo de `<TAMAÑO_MAX>`.
