@@ -111,10 +111,6 @@ La aplicación web no consume la API, por lo que se incluye una colección de Po
 | POST | `/api/auth/login` | ❌ | Devuelve el token JWT |
 | GET | `/api/productos` | ✅ | Lista de productos |
 | GET | `/api/productos/{id}` | ✅ | Detalle de un producto |
-| GET | `/api/categorias` | ✅ | Lista de categorías |
-| GET | `/api/categorias/{id}` | ✅ | Detalle de una categoría |
-| GET | `/api/marcas` | ✅ | Lista de marcas |
-| GET | `/api/marcas/{id}` | ✅ | Detalle de una marca |
  
 **Uso rápido:**
  
