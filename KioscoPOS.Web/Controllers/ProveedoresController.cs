@@ -42,11 +42,13 @@ public async Task<IActionResult>Index(string? buscar , int page = 1)
         });
     }
 
-//alta
-public IActionResult Create() =>View();
+    //alta
+    [Authorize(Roles = "Administrador")]
+    public IActionResult Create() => View();
 
-[HttpPost , ValidateAntiForgeryToken]
-public async Task<IActionResult>Create(Proveedor proveedor)
+    [HttpPost, ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
+    public async Task<IActionResult>Create(Proveedor proveedor)
     {
         proveedor.CUIT = NormalizarCuit(proveedor.CUIT);
         if (proveedor.CUIT != null &&
@@ -67,7 +69,7 @@ public async Task<IActionResult>Create(Proveedor proveedor)
     }
 
     //modificacion
-
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> Edit(int id)
     {
         var proveedor = await _context.Proveedores.FindAsync(id);
@@ -75,6 +77,7 @@ public async Task<IActionResult>Create(Proveedor proveedor)
         return View(proveedor);
     }
     [HttpPost, ValidateAntiForgeryToken]
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult>Edit(int id , Proveedor proveedor)
     {
         if(id !=proveedor.Id) return BadRequest();

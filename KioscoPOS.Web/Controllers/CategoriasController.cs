@@ -67,6 +67,7 @@ public class CategoriasController : Controller
     public record CategoriaDto(int Id, string? Nombre);
 
     [HttpPost]
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> CrearJson([FromBody] CategoriaDto dto)
     {
         var nombre = dto?.Nombre?.Trim();
@@ -83,6 +84,7 @@ public class CategoriasController : Controller
     }
 
     [HttpPut]
+    [Authorize(Roles = "Administrador")]
     public async Task<IActionResult> EditarJson(int id, [FromBody] CategoriaDto dto)
     {
         if (dto == null || id != dto.Id)

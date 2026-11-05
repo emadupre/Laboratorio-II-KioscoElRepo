@@ -5,28 +5,31 @@
 <div id="app-categorias" v-cloak>
   <h2>Gestión de Categorías <small class="text-muted fs-6">(SPA con Vue.js)</small></h2>
 
-  <div class="card mb-3 shadow-sm">
-    <div class="card-body">
-      <h5 class="card-title">{{ editando ? 'Editar categoría #' + form.id : 'Nueva categoría' }}</h5>
-      <div class="row g-2 align-items-end">
+  @if (User.IsInRole("Administrador"))
+  {
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title">{{ editando ? 'Editar categoría #' + form.id : 'Nueva categoría' }}</h5>
+        <div class="row g-2 align-items-end">
 
-        <div class="col-md-6">
-          <label class="form-label">Nombre</label>
-          <input v-model="form.nombre" class="form-control" v-on:keyup.enter="guardar" />
-        </div>
+          <div class="col-md-6">
+            <label class="form-label">Nombre</label>
+            <input v-model="form.nombre" class="form-control" v-on:keyup.enter="guardar" />
+          </div>
         
-        <div class="col-md-6">
-          <button class="btn btn-primary" v-on:click="guardar" :disabled="cargando">
-            {{ editando ? 'Actualizar' : 'Crear' }}
-          </button>
-          <button v-if="editando" class="btn btn-secondary" v-on:click="cancelarEdicion">Cancelar</button>
+          <div class="col-md-6">
+            <button class="btn btn-primary" v-on:click="guardar" :disabled="cargando">
+              {{ editando ? 'Actualizar' : 'Crear' }}
+            </button>
+            <button v-if="editando" class="btn btn-secondary" v-on:click="cancelarEdicion">Cancelar</button>
+          </div>
         </div>
-      </div>
 
-      <div v-if="mensajeError" class="alert alert-danger mt-2 mb-0">{{ mensajeError }}</div>
-      <div v-if="mensajeOk" class="alert alert-success mt-2 mb-0">{{ mensajeOk }}</div>
+        <div v-if="mensajeError" class="alert alert-danger mt-2 mb-0">{{ mensajeError }}</div>
+        <div v-if="mensajeOk" class="alert alert-success mt-2 mb-0">{{ mensajeOk }}</div>
+      </div>
     </div>
-  </div>
+  }
 
   <div class="d-flex gap-2 mb-3">
     <input v-model="buscar" v-on:keyup.enter="cargar(1)" class="form-control" placeholder="Buscar nombre.."
@@ -49,15 +52,15 @@
       </tr>
       <tr v-else-if="items.length === 0">
         <td colspan="3" class="text-center text-muted">Sin resultados</td>
-        </tr>
+      </tr>
       <tr v-for="c in items" :key="c.id">
         <td>{{ c.id }}</td>
         <td>{{ c.nombre }}</td>
         <td class="text-end">
-          <button class="btn btn-sm btn-outline-primary" v-on:click="editar(c)">Editar</button>
           @if (User.IsInRole("Administrador"))
           {
-          <button class="btn btn-sm btn-outline-danger" v-on:click="eliminar(c)">Eliminar</button>
+            <button class="btn btn-sm btn-outline-primary" v-on:click="editar(c)">Editar</button>
+            <button class="btn btn-sm btn-outline-danger" v-on:click="eliminar(c)">Eliminar</button>
           }
         </td>
       </tr>
